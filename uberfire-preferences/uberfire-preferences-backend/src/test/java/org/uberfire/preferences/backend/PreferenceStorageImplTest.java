@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.uberfire.backend.server.io.object.ObjectStorage;
 import org.uberfire.backend.server.io.object.ObjectStorageImpl;
+import org.uberfire.backend.server.spaces.Spaces;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.mocks.FileSystemTestingUtils;
@@ -93,7 +94,8 @@ public class PreferenceStorageImplTest {
                                                                         sessionInfo,
                                                                         scopeTypes,
                                                                         scopeFactory,
-                                                                        objectStorage);
+                                                                        objectStorage,
+                                                                        new Spaces());
         preferenceStorageServiceBackendImpl.init();
 
         userEntireApplicationScope = scopeFactory.createScope(userScope,

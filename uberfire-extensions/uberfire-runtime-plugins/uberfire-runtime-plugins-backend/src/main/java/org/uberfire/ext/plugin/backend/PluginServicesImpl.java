@@ -18,7 +18,6 @@ package org.uberfire.ext.plugin.backend;
 
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -69,7 +68,6 @@ import org.uberfire.java.nio.base.options.CommentedOption;
 import org.uberfire.java.nio.file.DirectoryStream;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.FileSystem;
-import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.NotDirectoryException;
 import org.uberfire.java.nio.file.Path;
@@ -114,24 +112,14 @@ public class PluginServicesImpl implements PluginServices {
     private DefaultFileNameValidator defaultFileNameValidator;
     @Inject
     private User identity;
+    @Inject
+    @Named("pluginsFS")
     private FileSystem fileSystem;
     private Path root;
 
     @PostConstruct
     public void init() {
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        try {
-            fileSystem = getIoService().newFileSystem(URI.create("default://system_ou/plugins"),
-                                                      new HashMap<String, Object>() {{
-                                                          put("init",
-                                                              Boolean.TRUE);
-                                                          put("internal",
-                                                              Boolean.TRUE);
-                                                      }});
-        } catch (FileSystemAlreadyExistsException e) {
-            fileSystem = getIoService().getFileSystem(URI.create("default://system_ou/plugins"));
-        }
-
         this.root = fileSystem.getRootDirectories().iterator().next();
     }
 
@@ -543,8 +531,10 @@ public class PluginServicesImpl implements PluginServices {
                                               final String newName,
                                               final String comment) {
 
-
-        return copy(path, newName, null, comment);
+        return copy(path,
+                    newName,
+                    null,
+                    comment);
     }
 
     @Override
@@ -560,9 +550,9 @@ public class PluginServicesImpl implements PluginServices {
 
         try {
             getIoService().startBatch(fileSystem,
-                    commentedOption(comment));
+                                      commentedOption(comment));
             getIoService().copy(convert(path).getParent(),
-                    newPath);
+                                newPath);
         } finally {
             getIoService().endBatch();
         }
@@ -573,7 +563,7 @@ public class PluginServicesImpl implements PluginServices {
         String registry = createRegistry(pluginContent);
 
         pluginAddedEvent.fire(new PluginAdded(pluginContent,
-                sessionInfo));
+                                              sessionInfo));
 
         return result;
     }
@@ -691,8 +681,9 @@ public class PluginServicesImpl implements PluginServices {
                                          fileContent);
         }
         return new LayoutEditorModel(pluginName,
-                PluginType.PERSPECTIVE_LAYOUT,
-                path, null).emptyLayout();
+                                     PluginType.PERSPECTIVE_LAYOUT,
+                                     path,
+                                     null).emptyLayout();
     }
 
     @Override

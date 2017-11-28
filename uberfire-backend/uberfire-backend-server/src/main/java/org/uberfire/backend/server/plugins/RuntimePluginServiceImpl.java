@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -34,6 +35,7 @@ import org.uberfire.backend.plugin.RuntimePlugin;
 import org.uberfire.backend.plugin.RuntimePluginProcessor;
 import org.uberfire.backend.plugin.RuntimePluginService;
 import org.uberfire.backend.server.plugins.processors.HTMLPluginProcessor;
+import org.uberfire.backend.server.spaces.Spaces;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
 import org.uberfire.java.nio.file.DirectoryStream;
@@ -55,6 +57,13 @@ public class RuntimePluginServiceImpl implements RuntimePluginService {
     @Inject
     HTMLPluginProcessor htmlPluginProcessor;
 
+    @Inject
+    Spaces spaces;
+
+    @PostConstruct
+    public void a(){
+        System.out.println("");
+    }
     @Override
     public Collection<String> listFrameworksContent() {
         return directoryContent("frameworks",

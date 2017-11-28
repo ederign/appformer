@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -30,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.annotations.Customizable;
 import org.uberfire.backend.server.io.object.ObjectStorage;
+import org.uberfire.backend.server.spaces.Spaces;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.file.FileVisitResult;
@@ -54,6 +54,9 @@ public class PreferenceStorageImpl implements PreferenceStorage {
     public static final String FILE_FORMAT = ".preferences";
     public static final int FILE_FORMAT_SIZE = FILE_FORMAT.length();
     private static final Logger logger = LoggerFactory.getLogger(PreferenceStorageImpl.class);
+
+    private Spaces spaces;
+
     private IOService ioService;
 
     private SessionInfo sessionInfo;
@@ -72,18 +75,21 @@ public class PreferenceStorageImpl implements PreferenceStorage {
                                  final SessionInfo sessionInfo,
                                  @Customizable final PreferenceScopeTypes scopeTypes,
                                  final PreferenceScopeFactory scopeFactory,
-                                 final ObjectStorage objectStorage) {
+                                 final ObjectStorage objectStorage,
+                                 final Spaces spaces) {
         this.ioService = ioService;
         this.sessionInfo = sessionInfo;
         this.scopeTypes = scopeTypes;
         this.scopeFactory = scopeFactory;
         this.objectStorage = objectStorage;
+        this.spaces = spaces;
     }
 
     @PostConstruct
     public void init() {
-        final String rootPath = "git://preferences";
-        objectStorage.init(rootPath);
+        objectStorage.init(spaces.resolveFileSystemURI(Spaces.Scheme.GIT,
+                                                       Spaces.Space.DEFAULT,
+                                                       "preferences"));
     }
 
     @Override

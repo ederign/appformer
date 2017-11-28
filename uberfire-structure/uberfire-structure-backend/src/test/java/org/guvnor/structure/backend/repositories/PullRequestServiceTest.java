@@ -38,6 +38,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.server.io.object.ObjectStorage;
+import org.uberfire.backend.server.spaces.Spaces;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.MergeCopyOption;
 import org.uberfire.java.nio.file.Path;
@@ -65,7 +66,8 @@ public class PullRequestServiceTest {
     @Before
     public void setUp() throws Exception {
         metadatas = new HashMap<>();
-        metadataStore = new GitMetadataStoreImpl(storage);
+        metadataStore = new GitMetadataStoreImpl(storage,
+                                                 new Spaces());
 
         this.service = new PullRequestServiceImpl(metadataStore,
                                                   ioService,
