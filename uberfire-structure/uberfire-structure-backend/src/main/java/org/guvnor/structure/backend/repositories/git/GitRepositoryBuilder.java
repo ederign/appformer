@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.guvnor.structure.repositories.Branch;
+import org.guvnor.structure.repositories.EnvironmentParameters;
 import org.guvnor.structure.repositories.PublicURI;
 import org.guvnor.structure.repositories.Repository;
 import org.guvnor.structure.repositories.impl.DefaultPublicURI;
@@ -50,7 +51,9 @@ public class GitRepositoryBuilder {
 
     public Repository build(final ConfigGroup repoConfig) {
 
-        repo = new GitRepository(repoConfig.getName());
+        ConfigItem space = repoConfig.getConfigItem(EnvironmentParameters.SPACE);
+        repo = new GitRepository(repoConfig.getName(),
+                                 space.getValue().toString());
 
         if (!repo.isValid()) {
             throw new IllegalStateException("Repository " + repoConfig.getName() + " not valid");

@@ -66,7 +66,7 @@ public class WorkspaceWorkspaceProjectContextTest {
         context.setActiveWorkspaceProject(new WorkspaceProject(mock(OrganizationalUnit.class),
                                                                mock(Repository.class),
                                                                new Branch("dev",
-                                                        devRoot),
+                                                                          devRoot),
                                                                mock(Module.class)));
 
         assertEquals(devRoot,
@@ -113,10 +113,12 @@ public class WorkspaceWorkspaceProjectContextTest {
     @Test
     public void testIgnoreRepositoryDeletedEventIfTheActiveRepositoryWasNotDeleted() throws Exception {
 
-        GitRepository deletedRepository = new GitRepository("deleted repo");
+        GitRepository deletedRepository = new GitRepository("deleted repo",
+                                                            "space");
 
         final WorkspaceProject activeWorkspaceProject = new WorkspaceProject(mock(OrganizationalUnit.class),
-                                                                             new GitRepository("active repo"),
+                                                                             new GitRepository("active repo",
+                                                                                               "space"),
                                                                              mock(Branch.class),
                                                                              mock(Module.class));
         context.setActiveWorkspaceProject(activeWorkspaceProject);

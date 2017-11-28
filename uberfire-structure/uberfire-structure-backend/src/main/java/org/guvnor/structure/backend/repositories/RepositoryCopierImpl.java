@@ -80,7 +80,7 @@ public class RepositoryCopierImpl
     private Repository getRepository(final OrganizationalUnit targetOU,
                                      final String newRepositoryName) {
         return repositoryService.createRepository(targetOU,
-                                                  GitRepository.SCHEME,
+                                                  GitRepository.SCHEME.toString(),
                                                   makeSafeRepositoryName(newRepositoryName),
                                                   new RepositoryEnvironmentConfigurations());
     }

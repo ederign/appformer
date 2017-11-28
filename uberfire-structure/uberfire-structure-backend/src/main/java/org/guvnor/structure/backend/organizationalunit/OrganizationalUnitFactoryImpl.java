@@ -46,6 +46,10 @@ public class OrganizationalUnitFactoryImpl implements OrganizationalUnitFactory 
         OrganizationalUnitImpl organizationalUnit = new OrganizationalUnitImpl(groupConfig.getName(),
                                                                                groupConfig.getConfigItemValue("owner"),
                                                                                groupConfig.getConfigItemValue("defaultGroupId"));
+
+
+
+
         ConfigItem<List<String>> repositories = groupConfig.getConfigItem("repositories");
         if (repositories != null) {
             for (String alias : repositories.getValue()) {

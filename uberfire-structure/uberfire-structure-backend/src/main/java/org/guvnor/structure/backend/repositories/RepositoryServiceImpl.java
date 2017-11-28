@@ -233,6 +233,8 @@ public class RepositoryServiceImpl implements RepositoryService {
                                        final RepositoryEnvironmentConfigurations repositoryEnvironmentConfigurations) throws RepositoryAlreadyExistsException {
 
         try {
+            //do I need this?
+            repositoryEnvironmentConfigurations.setSpace(organizationalUnit.getName());
 
             final Repository repository = createRepository(scheme,
                                                            alias,

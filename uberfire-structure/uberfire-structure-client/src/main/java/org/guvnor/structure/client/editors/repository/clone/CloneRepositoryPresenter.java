@@ -131,17 +131,18 @@ public class CloneRepositoryPresenter implements CloneRepositoryView.Presenter {
                                        getErrorCallback()).createRepository(availableOrganizationalUnits.get(view.getSelectedOrganizationalUnit()),
                                                                             scheme,
                                                                             alias,
-                                                                            getRepositoryConfiguration());
+                                                                            getRepositoryConfiguration(view.getSelectedOrganizationalUnit()));
             }
         };
     }
 
-    private RepositoryEnvironmentConfigurations getRepositoryConfiguration() {
+    private RepositoryEnvironmentConfigurations getRepositoryConfiguration(String selectedOrganizationalUnit) {
         final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
 
         configuration.setUserName(view.getUsername().trim());
         configuration.setPassword(view.getPassword().trim());
         configuration.setOrigin(view.getGitUrl());
+        configuration.setSpace(selectedOrganizationalUnit);
         return configuration;
     }
 

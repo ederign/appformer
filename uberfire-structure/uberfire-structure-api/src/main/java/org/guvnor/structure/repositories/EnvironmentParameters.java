@@ -25,6 +25,10 @@ public class EnvironmentParameters {
 
     public static final String SCHEME = "scheme";
 
+    public static final String SPACE = "space";
+
+    public static final String MANAGED = "managed";
+
     public static final String ORIGIN = "origin";
 
     public static final String USER_NAME = "username";

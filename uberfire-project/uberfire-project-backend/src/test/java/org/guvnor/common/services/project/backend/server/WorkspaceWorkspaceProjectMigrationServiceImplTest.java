@@ -238,7 +238,7 @@ public class WorkspaceWorkspaceProjectMigrationServiceImplTest {
                 return newRepository;
             }
         }).when(repositoryService).createRepository(eq(organizationalUnit),
-                                                    eq(GitRepository.SCHEME),
+                                                    eq(GitRepository.SCHEME.toString()),
                                                     anyString(),
                                                     any(RepositoryEnvironmentConfigurations.class));
     }

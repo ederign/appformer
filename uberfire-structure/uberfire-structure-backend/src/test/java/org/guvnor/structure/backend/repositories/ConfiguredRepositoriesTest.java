@@ -71,7 +71,7 @@ public class ConfiguredRepositoriesTest {
     private ConfigGroup addRepository(final String alias,
                                       final String... branches) {
         final ConfigGroup configGroup = new ConfigGroup();
-        final GitRepository repository = new GitRepository(alias);
+        final GitRepository repository = new GitRepository(alias, "space");
 
         final HashMap<String, Branch> branchMap = new HashMap<>();
 

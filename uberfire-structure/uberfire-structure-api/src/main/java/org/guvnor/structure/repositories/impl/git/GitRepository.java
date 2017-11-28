@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 
 package org.guvnor.structure.repositories.impl.git;
 
@@ -29,30 +29,40 @@ import org.guvnor.structure.repositories.Repository;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.security.ResourceType;
+import org.uberfire.spaces.SpacesAPI;
+
+import static org.uberfire.spaces.SpacesAPI.Scheme.GIT;
 
 @Portable
 public class GitRepository
         implements Repository {
 
-    public static final String SCHEME = "git";
+    public static final SpacesAPI.Scheme SCHEME = GIT;
 
     private final Map<String, Object> environment = new HashMap<String, Object>();
     private final List<PublicURI> publicURIs = new ArrayList<PublicURI>();
     private final Map<String, Branch> branches = new HashMap<>();
     private String alias = null;
+    private String space = SpacesAPI.Space.DEFAULT.toString();
+    private Path root;
+
     private Collection<String> groups = new ArrayList<String>();
     private boolean requiresRefresh = true;
 
     public GitRepository() {
     }
 
-    public GitRepository(final String alias) {
+    public GitRepository(final String alias,
+                         String space) {
         this.alias = alias;
+        this.space = space;
     }
 
     public GitRepository(final String alias,
+                         final String space,
                          final List<PublicURI> publicURIs) {
-        this(alias);
+        this(alias,
+             space);
 
         if (publicURIs != null && !publicURIs.isEmpty()) {
             this.publicURIs.addAll(publicURIs);
@@ -65,7 +75,12 @@ public class GitRepository
     }
 
     @Override
-    public String getScheme() {
+    public String getSpace() {
+        return space;
+    }
+
+    @Override
+    public SpacesAPI.Scheme getScheme() {
         return SCHEME;
     }
 
@@ -115,7 +130,11 @@ public class GitRepository
 
     @Override
     public String getUri() {
-        return getScheme() + "://" + getAlias();
+
+        String alias = SpacesAPI.sanitizeFileSystemName(getAlias());
+        return SpacesAPI.resolveFileSystem(getScheme(),
+                                           getSpace(),
+                                           alias).toString();
     }
 
     @Override

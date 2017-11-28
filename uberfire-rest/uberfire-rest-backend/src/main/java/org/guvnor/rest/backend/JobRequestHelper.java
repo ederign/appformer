@@ -1,18 +1,18 @@
 /*
-* Copyright 2013 Red Hat, Inc. and/or its affiliates.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2013 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.guvnor.rest.backend;
 
 import java.lang.annotation.Annotation;
@@ -113,9 +113,11 @@ public class JobRequestHelper {
 
             // username and password are optional
             final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
+            //TODO which space?
             if (repository.getUserName() != null && !"".equals(repository.getUserName())) {
                 configuration.setUserName(repository.getUserName());
             }
+            //TODO which space?
             if (repository.getPassword() != null && !"".equals(repository.getPassword())) {
                 configuration.setPassword(repository.getPassword());
             }
@@ -276,8 +278,8 @@ public class JobRequestHelper {
         } else {
             final WorkspaceProject workspaceProject = workspaceProjectService.newProject(organizationalUnit,
                                                                                          new POM(new GAV(organizationalUnit.getDefaultGroupId(),
-                                                                                                projectName,
-                                                                                                "1.0.0")));
+                                                                                                         projectName,
+                                                                                                         "1.0.0")));
             final Module module = workspaceProject.getMainModule();
 
             if (module == null) {
@@ -480,7 +482,8 @@ public class JobRequestHelper {
                     result.setResult("Repository [" + repositoryAlias + "] does not exist");
                     return result;
                 }
-                GitRepository repo = new GitRepository(repositoryAlias);
+                GitRepository repo = new GitRepository(repositoryAlias,
+                                                       organizationalUnit.getName());
                 repositories.add(repo);
             }
             organizationalUnit = organizationalUnitService.createOrganizationalUnit(organizationalUnitName,
@@ -566,7 +569,8 @@ public class JobRequestHelper {
                                                                            null,
                                                                            null);
 
-        GitRepository repo = new GitRepository(repositoryAlias);
+        GitRepository repo = new GitRepository(repositoryAlias,
+                                               organizationalUnit.getName());
         try {
             organizationalUnitService.addRepository(organizationalUnit,
                                                     repo);
@@ -603,7 +607,8 @@ public class JobRequestHelper {
         OrganizationalUnit organizationalUnit = new OrganizationalUnitImpl(organizationalUnitName,
                                                                            null,
                                                                            null);
-        GitRepository repo = new GitRepository(repositoryAlias);
+        GitRepository repo = new GitRepository(repositoryAlias,
+                                               organizationalUnit.getName());
         try {
             organizationalUnitService.removeRepository(organizationalUnit,
                                                        repo);

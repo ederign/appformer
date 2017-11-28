@@ -71,7 +71,9 @@ public class SystemConfigProducerTest {
                 .thenReturn(fs);
 
         final Bean fileSystemBean = producer.createFileSystemBean(bm,
-                                                                  mock(InjectionTarget.class));
+                                                                  mock(InjectionTarget.class),
+                                                                  "systemFS",
+                                                                  "system");
 
         assertNull(PriorityDisposableRegistry.get("systemFS"));
 
