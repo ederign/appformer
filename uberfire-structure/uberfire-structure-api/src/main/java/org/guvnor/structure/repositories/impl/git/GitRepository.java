@@ -114,6 +114,7 @@ public class GitRepository
 
     @Override
     public String getUri() {
+
         return getScheme() + "://" + getAlias();
     }
 

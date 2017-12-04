@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.guvnor.structure.repositories.impl.git.GitRepository;
+import org.uberfire.backend.server.spaces.Spaces;
 
 import static java.util.Collections.unmodifiableCollection;
 
