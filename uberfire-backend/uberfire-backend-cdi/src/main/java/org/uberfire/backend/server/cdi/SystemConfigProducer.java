@@ -47,7 +47,8 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.spaces.SpacesAPI;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 import org.uberfire.commons.lifecycle.PriorityDisposableRegistry;
 import org.uberfire.commons.services.cdi.Startable;
 import org.uberfire.commons.services.cdi.Startup;
@@ -284,17 +285,17 @@ public class SystemConfigProducer implements Extension {
                                                                         IOService.class,
                                                                         _ctx);
 
-                final Bean<Spaces> spacesBean = (Bean<Spaces>) bm.getBeans(Spaces.class).iterator().next();
-                final CreationalContext<Spaces> spacesCtx = bm.createCreationalContext(spacesBean);
-                final Spaces spaces = (Spaces) bm.getReference(spacesBean,
-                                                               Spaces.class,
-                                                               spacesCtx);
+                final Bean<SpacesAPIImpl> spacesBean = (Bean<SpacesAPIImpl>) bm.getBeans(SpacesAPIImpl.class).iterator().next();
+                final CreationalContext<SpacesAPIImpl> spacesCtx = bm.createCreationalContext(spacesBean);
+                final SpacesAPIImpl spaces = (SpacesAPIImpl) bm.getReference(spacesBean,
+                                                                             SpacesAPIImpl.class,
+                                                                             spacesCtx);
                 FileSystem fs;
                 try {
                     //@Question porcelli: this should be default right?
-                    fs = ioService.newFileSystem(spaces.resolveFileSystemURI(Spaces.Scheme.DEFAULT,
-                                                                             Spaces.Space.DEFAULT,
-                                                                             fsName),
+                    fs = ioService.newFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
+                                                                                SpacesAPIImpl.Space.DEFAULT,
+                                                                                fsName),
                                                  new HashMap<String, Object>() {{
                                                      put("init",
                                                          Boolean.TRUE);
@@ -302,8 +303,8 @@ public class SystemConfigProducer implements Extension {
                                                          Boolean.TRUE);
                                                  }});
                 } catch (FileSystemAlreadyExistsException e) {
-                    fs = ioService.getFileSystem(spaces.resolveFileSystemURI(Spaces.Scheme.DEFAULT,
-                                                                             Spaces.Space.DEFAULT,
+                    fs = ioService.getFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
+                                                                             SpacesAPIImpl.Space.DEFAULT,
                                                                              fsName));
                 }
 

@@ -23,11 +23,7 @@ import java.util.Map;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 
-import static org.guvnor.structure.repositories.EnvironmentParameters.INIT;
-import static org.guvnor.structure.repositories.EnvironmentParameters.MANAGED;
-import static org.guvnor.structure.repositories.EnvironmentParameters.ORIGIN;
-import static org.guvnor.structure.repositories.EnvironmentParameters.PASSWORD;
-import static org.guvnor.structure.repositories.EnvironmentParameters.USER_NAME;
+import static org.guvnor.structure.repositories.EnvironmentParameters.*;
 
 @Portable
 public class RepositoryEnvironmentConfigurations {
@@ -52,6 +48,11 @@ public class RepositoryEnvironmentConfigurations {
 
     public boolean containsConfiguration(final String configurationName) {
         return configurationMap.containsKey(configurationName);
+    }
+
+    public void setSpace(final String space) {
+        configurationMap.put(SPACE,
+                             space);
     }
 
     public void setManaged(final boolean managed) {

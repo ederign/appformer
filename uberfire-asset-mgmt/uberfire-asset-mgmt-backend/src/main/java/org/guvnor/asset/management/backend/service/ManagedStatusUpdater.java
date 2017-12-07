@@ -45,6 +45,7 @@ public class ManagedStatusUpdater {
         final RepositoryEnvironmentConfigurations config = new RepositoryEnvironmentConfigurations();
 
         config.setManaged(managed);
+        //TODO default space?
         final Repository updatedRepo = repositoryService.updateRepositoryConfiguration(repository,
                                                                                        config);
         repositoryUpdatedEvent.fire(new RepositoryEnvironmentUpdatedEvent(updatedRepo));

@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.guvnor.structure.repositories.impl.git.GitRepository;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.spaces.SpacesAPI;
 
 import static java.util.Collections.unmodifiableCollection;
 
@@ -36,12 +36,15 @@ public class SystemRepository extends GitRepository {
         add("admin");
     }};
 
-    public static final SystemRepository SYSTEM_REPO = new SystemRepository(ALIAS);
+    public static final SystemRepository SYSTEM_REPO = new SystemRepository(ALIAS,
+                                                                            SpacesAPI.Space.DEFAULT.toString());
 
     private final Map<String, Object> environment = new HashMap<String, Object>();
 
-    private SystemRepository(final String alias) {
-        super(alias);
+    private SystemRepository(final String alias,
+                             String space) {
+        super(alias,
+              space);
         environment.put("init",
                         Boolean.TRUE);
     }
@@ -57,10 +60,10 @@ public class SystemRepository extends GitRepository {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getUri() {
-        return getScheme() + "://" + getAlias();
-    }
+//    @Override
+//    public String getUri() {
+//        return getScheme() + "://" + getAlias();
+//    }
 
     @Override
     public boolean isValid() {

@@ -298,6 +298,7 @@ public class CreateRepositoryWizard extends AbstractWizard {
         final String alias = model.getRepositoryName().trim();
         final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
         configuration.setManaged(assetsManagementIsGranted && model.isManged());
+        //todo which space?
 
         parentComplete();
 

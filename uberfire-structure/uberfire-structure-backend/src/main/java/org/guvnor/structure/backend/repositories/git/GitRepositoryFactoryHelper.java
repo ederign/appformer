@@ -57,7 +57,8 @@ public class GitRepositoryFactoryHelper implements RepositoryFactoryHelper {
         final ConfigItem<String> schemeConfigItem = repoConfig.getConfigItem(EnvironmentParameters.SCHEME);
         checkNotNull("schemeConfigItem",
                      schemeConfigItem);
-        return SCHEME.equals(schemeConfigItem.getValue());
+        //FIXME
+        return SCHEME.toString().equals(schemeConfigItem.getValue());
     }
 
     @Override

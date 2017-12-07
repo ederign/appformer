@@ -90,8 +90,10 @@ public class ProjectContextTest {
     @Test
     public void testIgnoreRepositoryDeletedEventIfTheActiveRepositoryWasNotDeleted() throws Exception {
 
-        GitRepository activeRepository = new GitRepository("active repo");
-        GitRepository deletedRepository = new GitRepository("deleted repo");
+        GitRepository activeRepository = new GitRepository("active repo",
+                                                           "space");
+        GitRepository deletedRepository = new GitRepository("deleted repo",
+                                                            "space");
 
         context.setActiveRepository(activeRepository);
 

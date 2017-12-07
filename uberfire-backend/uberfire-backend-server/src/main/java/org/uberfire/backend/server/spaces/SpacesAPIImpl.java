@@ -18,15 +18,14 @@ package org.uberfire.backend.server.spaces;
 import java.net.URI;
 import javax.enterprise.context.ApplicationScoped;
 
+import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
 
 @ApplicationScoped
 @Startup(StartupType.BOOTSTRAP)
-public class Spaces {
+public class SpacesAPIImpl implements SpacesAPI {
 
-    //refactor space for a entity?
-    //schmes for a entyt?
     public URI resolveFileSystemURI(String scheme,
                                     String space,
                                     String fsName) {
@@ -43,37 +42,12 @@ public class Spaces {
         return URI.create(uri);
     }
 
-    public enum Space {
+    public URI resolveFileSystemURI(Scheme scheme,
+                                    String space,
+                                    String fsName) {
+        String uri = scheme + "://" + space + "/" + fsName;
 
-        DEFAULT("system");
-
-        private final String name;
-
-        Space(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+        return URI.create(uri);
     }
 
-    public enum Scheme {
-        //TODO load from providers
-        DEFAULT("default"),
-        GIT("git"),
-        FILE("file");
-
-        private final String name;
-
-        Scheme(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 }

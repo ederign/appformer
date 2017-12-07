@@ -27,17 +27,21 @@ import org.guvnor.structure.repositories.Repository;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.security.ResourceType;
+import org.uberfire.spaces.SpacesAPI;
+
+import static org.uberfire.spaces.SpacesAPI.Scheme.GIT;
 
 @Portable
 public class GitRepository
         implements Repository {
 
-    public static final String SCHEME = "git";
+    public static final SpacesAPI.Scheme SCHEME = GIT;
 
     private final Map<String, Object> environment = new HashMap<String, Object>();
     private final List<PublicURI> publicURIs = new ArrayList<PublicURI>();
 
     private String alias = null;
+    private String space = SpacesAPI.Space.DEFAULT.toString();
     private Path root;
 
     private Collection<String> groups = new ArrayList<String>();
@@ -48,13 +52,17 @@ public class GitRepository
     public GitRepository() {
     }
 
-    public GitRepository(final String alias) {
+    public GitRepository(final String alias,
+                         String space) {
         this.alias = alias;
+        this.space = space;
     }
 
     public GitRepository(final String alias,
+                         final String space,
                          final List<PublicURI> publicURIs) {
-        this(alias);
+        this(alias,
+             space);
 
         if (publicURIs != null && !publicURIs.isEmpty()) {
             this.publicURIs.addAll(publicURIs);
@@ -67,7 +75,12 @@ public class GitRepository
     }
 
     @Override
-    public String getScheme() {
+    public String getSpace() {
+        return space;
+    }
+
+    @Override
+    public SpacesAPI.Scheme getScheme() {
         return SCHEME;
     }
 
@@ -115,7 +128,9 @@ public class GitRepository
     @Override
     public String getUri() {
 
-        return getScheme() + "://" + getAlias();
+        return SpacesAPI.resolveFileSystem(getScheme(),
+                                           getSpace(),
+                                           getAlias()).toString();
     }
 
     @Override

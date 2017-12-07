@@ -19,16 +19,19 @@ import java.net.URI;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.uberfire.spaces.SpacesAPI;
 
 import static org.junit.Assert.*;
 
-public class SpacesTest {
+public class SpacesAPIImplTest {
 
-    Spaces spaces;
+
+    //FIXME define better this interfacs
+    SpacesAPIImpl spaces;
 
     @Before
     public void setup() {
-        spaces = new Spaces();
+        spaces = new SpacesAPIImpl();
     }
 
     @Test
@@ -48,8 +51,8 @@ public class SpacesTest {
                                                  "system").toString());
 
         assertEquals("default://system/system",
-                     spaces.resolveFileSystemURI(Spaces.Scheme.DEFAULT,
-                                                 Spaces.Space.DEFAULT,
+                     spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
+                                                 SpacesAPIImpl.Space.DEFAULT,
                                                  "system").toString());
     }
 }

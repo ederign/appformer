@@ -27,9 +27,10 @@ import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.annotations.Customizable;
 import org.uberfire.backend.server.io.object.ObjectStorage;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.file.FileVisitResult;
@@ -55,7 +56,7 @@ public class PreferenceStorageImpl implements PreferenceStorage {
     public static final int FILE_FORMAT_SIZE = FILE_FORMAT.length();
     private static final Logger logger = LoggerFactory.getLogger(PreferenceStorageImpl.class);
 
-    private Spaces spaces;
+    private SpacesAPIImpl spaces;
 
     private IOService ioService;
 
@@ -76,7 +77,7 @@ public class PreferenceStorageImpl implements PreferenceStorage {
                                  @Customizable final PreferenceScopeTypes scopeTypes,
                                  final PreferenceScopeFactory scopeFactory,
                                  final ObjectStorage objectStorage,
-                                 final Spaces spaces) {
+                                 final SpacesAPIImpl spaces) {
         this.ioService = ioService;
         this.sessionInfo = sessionInfo;
         this.scopeTypes = scopeTypes;
@@ -87,9 +88,9 @@ public class PreferenceStorageImpl implements PreferenceStorage {
 
     @PostConstruct
     public void init() {
-        objectStorage.init(spaces.resolveFileSystemURI(Spaces.Scheme.GIT,
-                                                       Spaces.Space.DEFAULT,
-                                                       "preferences"));
+        objectStorage.init(spaces.resolveFileSystemURI(SpacesAPI.Scheme.GIT,
+                                                          SpacesAPIImpl.Space.DEFAULT,
+                                                          "preferences"));
     }
 
     @Override

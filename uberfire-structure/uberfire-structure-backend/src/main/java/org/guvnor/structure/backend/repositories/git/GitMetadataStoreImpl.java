@@ -28,8 +28,9 @@ import org.guvnor.structure.repositories.GitMetadataStore;
 import org.guvnor.structure.repositories.impl.GitMetadataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.backend.server.io.object.ObjectStorage;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 
 public class GitMetadataStoreImpl implements GitMetadataStore {
 
@@ -38,11 +39,11 @@ public class GitMetadataStoreImpl implements GitMetadataStore {
 
     private URI metadataFS;
     private ObjectStorage storage;
-    private Spaces spaces;
+    private SpacesAPIImpl spaces;
 
     @Inject
     public GitMetadataStoreImpl(ObjectStorage storage,
-                                Spaces spaces) {
+                                SpacesAPIImpl spaces) {
         this.storage = storage;
         this.spaces = spaces;
     }
@@ -50,9 +51,9 @@ public class GitMetadataStoreImpl implements GitMetadataStore {
     @PostConstruct
     public void init() {
 
-        metadataFS = spaces.resolveFileSystemURI(Spaces.Scheme.DEFAULT,
-                                                 Spaces.Space.DEFAULT,
-                                                 "metadata");
+        metadataFS = spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
+                                                    SpacesAPIImpl.Space.DEFAULT,
+                                                    "metadata");
         if (logger.isDebugEnabled()) {
             logger.debug("Initializing GitMetadataStoreImpl {}",
                          metadataFS);

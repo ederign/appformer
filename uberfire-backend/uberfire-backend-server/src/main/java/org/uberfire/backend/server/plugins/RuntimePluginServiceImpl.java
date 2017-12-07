@@ -35,7 +35,7 @@ import org.uberfire.backend.plugin.RuntimePlugin;
 import org.uberfire.backend.plugin.RuntimePluginProcessor;
 import org.uberfire.backend.plugin.RuntimePluginService;
 import org.uberfire.backend.server.plugins.processors.HTMLPluginProcessor;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
 import org.uberfire.java.nio.file.DirectoryStream;
@@ -58,7 +58,7 @@ public class RuntimePluginServiceImpl implements RuntimePluginService {
     HTMLPluginProcessor htmlPluginProcessor;
 
     @Inject
-    Spaces spaces;
+    SpacesAPIImpl spaces;
 
     @PostConstruct
     public void a(){

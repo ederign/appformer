@@ -65,10 +65,14 @@ public class RepositoriesPresenterTest {
     @Mock
     private Path branchPath;
 
-    private Repository r1 = createRepository("r1");
-    private Repository r2 = createRepository("r2");
-    private Repository r3 = createRepository("r3");
-    private Repository r4 = createRepository("r4");
+    private Repository r1 = createRepository("r1",
+                                             "space");
+    private Repository r2 = createRepository("r2",
+                                             "space");
+    private Repository r3 = createRepository("r3",
+                                             "space");
+    private Repository r4 = createRepository("r4",
+                                             "space");
 
     @Mock
     private RepositoryItemView itemView1;
@@ -245,8 +249,10 @@ public class RepositoriesPresenterTest {
         return itemPresenter;
     }
 
-    private Repository createRepository(String alias) {
-        GitRepository repository = new GitRepository(alias);
+    private Repository createRepository(String alias,
+                                        String space) {
+        GitRepository repository = new GitRepository(alias,
+                                                     space);
         repository.addBranch("master",
                              branchPath);
         return repository;

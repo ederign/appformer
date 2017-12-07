@@ -112,6 +112,7 @@ public class JobRequestHelper {
 
             // username and password are optional
             final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
+            //TODO which space?
             if (repository.getUserName() != null && !"".equals(repository.getUserName())) {
                 configuration.setUserName(repository.getUserName());
             }
@@ -140,6 +141,7 @@ public class JobRequestHelper {
 
             // username and password are optional
             final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
+            //TODO which space
             if (repository.getUserName() != null && !"".equals(repository.getUserName())) {
                 configuration.setUserName(repository.getUserName());
             }
@@ -534,7 +536,8 @@ public class JobRequestHelper {
                     result.setResult("Repository [" + repositoryAlias + "] does not exist");
                     return result;
                 }
-                GitRepository repo = new GitRepository(repositoryAlias);
+                GitRepository repo = new GitRepository(repositoryAlias,
+                                                       organizationalUnit.getName());
                 repositories.add(repo);
             }
             organizationalUnit = organizationalUnitService.createOrganizationalUnit(organizationalUnitName,
@@ -620,7 +623,8 @@ public class JobRequestHelper {
                                                                            null,
                                                                            null);
 
-        GitRepository repo = new GitRepository(repositoryAlias);
+        GitRepository repo = new GitRepository(repositoryAlias,
+                                               organizationalUnitName);
         try {
             organizationalUnitService.addRepository(organizationalUnit,
                                                     repo);
@@ -657,7 +661,8 @@ public class JobRequestHelper {
         OrganizationalUnit organizationalUnit = new OrganizationalUnitImpl(organizationalUnitName,
                                                                            null,
                                                                            null);
-        GitRepository repo = new GitRepository(repositoryAlias);
+        GitRepository repo = new GitRepository(repositoryAlias,
+                                               organizationalUnitName);
         try {
             organizationalUnitService.removeRepository(organizationalUnit,
                                                        repo);

@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.server.io.object.ObjectStorage;
-import org.uberfire.backend.server.spaces.Spaces;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 
 import static org.jgroups.util.Util.assertEquals;
 import static org.jgroups.util.Util.assertFalse;
@@ -42,7 +42,7 @@ public class GitMetadataImplStoreTest {
     @Mock
     private ObjectStorage storage;
     private Map<String, GitMetadataImpl> metadatas;
-    private Spaces spaces = new Spaces();
+    private SpacesAPIImpl spaces = new SpacesAPIImpl();
 
     @Before
     public void setUp() throws Exception {
