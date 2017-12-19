@@ -163,13 +163,11 @@ public class OrganizationalUnitManagerPresenterImpl implements OrganizationalUni
 
     @Override
     public void loadOrganizationalUnits() {
-        view.showBusyIndicator(OrganizationalUnitManagerConstants.INSTANCE.Wait());
         organizationalUnitService.call(new RemoteCallback<Collection<OrganizationalUnit>>() {
                                            @Override
                                            public void callback(final Collection<OrganizationalUnit> organizationalUnits) {
                                                OrganizationalUnitManagerPresenterImpl.this.allOrganizationalUnits = organizationalUnits;
                                                view.setOrganizationalUnits(organizationalUnits);
-                                               view.hideBusyIndicator();
                                            }
                                        },
                                        new HasBusyIndicatorDefaultErrorCallback(view)).getOrganizationalUnits();
