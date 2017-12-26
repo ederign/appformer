@@ -29,7 +29,7 @@ import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @Ignore
-public class FileTreeWalkerTest extends AbstractBaseTest {
+public class FileTreeTest extends AbstractBaseTest {
 
     final AtomicInteger preDir = new AtomicInteger();
     final AtomicInteger postDir = new AtomicInteger();
@@ -76,10 +76,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
 
     @Test
     public void testWalker() {
-        final FileTreeWalker walker = new FileTreeWalker(simple,
-                                                         1);
-
-        walker.walk(Paths.get("/some/path"));
+        FileTree.walk(Paths.get("/some/path"),
+                      simple,
+                      1);
 
         assertThat(preDir.get()).isEqualTo(0);
         assertThat(postDir.get()).isEqualTo(0);
@@ -96,7 +95,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                                                 "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      simple,
+                      1);
 
         assertThat(preDir.get()).isEqualTo(1);
         assertThat(postDir.get()).isEqualTo(1);
@@ -104,7 +105,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
         assertThat(failFile.get()).isEqualTo(0);
 
         cleanupVisitor();
-        walker.walk(file1);
+        FileTree.walk(file1,
+                      simple,
+                      1);
 
         assertThat(preDir.get()).isEqualTo(0);
         assertThat(postDir.get()).isEqualTo(0);
@@ -114,16 +117,15 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
 
     @Test
     public void testWalkerDeep2() {
-        final FileTreeWalker walker = new FileTreeWalker(simple,
-                                                         2);
-
         final Path dir = newTempDir(null);
         final Path subDir = newTempDir(dir);
         final Path subSubDir = newTempDir(subDir);
         final Path subSubSubDir = newTempDir(subSubDir);
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      simple,
+                      2);
 
         assertThat(preDir.get()).isEqualTo(2);
         assertThat(postDir.get()).isEqualTo(2);
@@ -133,8 +135,6 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
 
     @Test
     public void testWalkerDeep1() {
-        final FileTreeWalker walker = new FileTreeWalker(simple,
-                                                         1);
 
         final Path dir = newTempDir(null);
         final Path subDir = newTempDir(dir);
@@ -149,7 +149,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                              "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      simple,
+                      1);
 
         assertThat(preDir.get()).isEqualTo(1);
         assertThat(postDir.get()).isEqualTo(1);
@@ -194,9 +196,6 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
             }
         };
 
-        final FileTreeWalker walker = new FileTreeWalker(terminateOnDir,
-                                                         2);
-
         final Path dir = newTempDir(null);
         final Path subDir = newTempDir(dir);
         final Path subSubDir = newTempDir(subDir);
@@ -210,7 +209,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                              "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      terminateOnDir,
+                      2);
 
         assertThat(preDir.get()).isEqualTo(2);
         assertThat(postDir.get()).isEqualTo(0);
@@ -255,9 +256,6 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
             }
         };
 
-        final FileTreeWalker walker = new FileTreeWalker(terminateOnDir,
-                                                         2);
-
         final Path dir = newTempDir(null);
         final Path subDir1 = newTempDir(dir);
         final Path subDir2 = newTempDir(dir);
@@ -272,7 +270,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                              "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      terminateOnDir,
+                      2);
 
         assertThat(preDir.get()).isEqualTo(2);
         assertThat(postDir.get()).isEqualTo(1);
@@ -320,9 +320,6 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
             }
         };
 
-        final FileTreeWalker walker = new FileTreeWalker(terminateOnDir,
-                                                         2);
-
         final Path dir = newTempDir(null);
         final Path subDir1 = newTempDir(dir);
         final Path subDir2 = newTempDir(dir);
@@ -337,7 +334,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                              "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      terminateOnDir,
+                      2);
 
         assertThat(preDir.get()).isEqualTo(2);
         assertThat(postDir.get()).isEqualTo(1);
@@ -385,9 +384,6 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
             }
         };
 
-        final FileTreeWalker walker = new FileTreeWalker(terminateOnDir,
-                                                         2);
-
         final Path dir = newTempDir(null);
         final Path subDir1 = newTempDir(dir);
         final Path subDir2 = newTempDir(dir);
@@ -402,7 +398,9 @@ public class FileTreeWalkerTest extends AbstractBaseTest {
                              "bar");
 
         cleanupVisitor();
-        walker.walk(dir);
+        FileTree.walk(dir,
+                      terminateOnDir,
+                      2);
 
         assertThat(preDir.get()).isEqualTo(2);
         assertThat(postDir.get()).isEqualTo(0);

@@ -53,7 +53,7 @@ import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.Files;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.StandardDeleteOption;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 
@@ -269,7 +269,7 @@ public class DataSetDefRegistryCDI extends DataSetDefRegistryImpl implements CSV
         if (ioService.exists(root)) {
             walkFileTree(checkNotNull("root",
                                       root),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
@@ -369,7 +369,7 @@ public class DataSetDefRegistryCDI extends DataSetDefRegistryImpl implements CSV
                                                      "Delete temporal files"));
             try {
                 walkFileTree(tempPath,
-                             new SimpleFileVisitor<Path>() {
+                             new FileVisitor<Path>() {
 
                                  @Override
                                  public FileVisitResult postVisitDirectory(Path dir,

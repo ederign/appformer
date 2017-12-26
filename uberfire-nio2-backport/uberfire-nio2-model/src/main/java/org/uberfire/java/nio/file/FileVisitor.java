@@ -21,15 +21,26 @@ import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 
 public interface FileVisitor<T> {
 
-    FileVisitResult preVisitDirectory(T dir,
-                                      BasicFileAttributes attrs) throws IOException;
+    default FileVisitResult preVisitDirectory(T dir,
+                                              BasicFileAttributes attrs) throws IOException {
+        return FileVisitResult.CONTINUE;
+    }
 
-    FileVisitResult visitFile(T file,
-                              BasicFileAttributes attrs) throws IOException;
+    default FileVisitResult visitFile(T file,
+                                      BasicFileAttributes attrs) throws IOException {
+        return FileVisitResult.CONTINUE;
+    }
 
-    FileVisitResult visitFileFailed(T file,
-                                    IOException exc) throws IOException;
+    default FileVisitResult visitFileFailed(T file,
+                                            IOException exc) throws IOException {
+        throw exc;
+    }
 
-    FileVisitResult postVisitDirectory(T dir,
-                                       IOException exc) throws IOException;
+    default FileVisitResult postVisitDirectory(T dir,
+                                               IOException exc) throws IOException {
+        if (exc != null) {
+            throw exc;
+        }
+        return FileVisitResult.CONTINUE;
+    }
 }

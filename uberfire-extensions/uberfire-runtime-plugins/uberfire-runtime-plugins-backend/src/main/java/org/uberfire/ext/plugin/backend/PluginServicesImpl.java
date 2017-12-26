@@ -73,7 +73,7 @@ import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.NotDirectoryException;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.StandardDeleteOption;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.rpc.SessionInfo;
@@ -156,7 +156,7 @@ public class PluginServicesImpl implements PluginServices {
         if (getIoService().exists(path)) {
             walkFileTree(checkNotNull("path",
                                       path),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
@@ -228,7 +228,7 @@ public class PluginServicesImpl implements PluginServices {
         if (getIoService().exists(root)) {
             walkFileTree(checkNotNull("root",
                                       root),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
@@ -614,7 +614,7 @@ public class PluginServicesImpl implements PluginServices {
 
     private void removeRegistry(final Path path) {
         walkFileTree(path,
-                     new SimpleFileVisitor<Path>() {
+                     new FileVisitor<Path>() {
                          @Override
                          public FileVisitResult visitFile(final Path file,
                                                           final BasicFileAttributes attrs) throws IOException {
@@ -760,7 +760,7 @@ public class PluginServicesImpl implements PluginServices {
         if (getIoService().exists(root)) {
             walkFileTree(checkNotNull("root",
                                       root),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
@@ -795,7 +795,7 @@ public class PluginServicesImpl implements PluginServices {
         if (getIoService().exists(root)) {
             walkFileTree(checkNotNull("root",
                                       root),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {

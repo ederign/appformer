@@ -32,7 +32,7 @@ import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.NoSuchFileException;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.StandardDeleteOption;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.workbench.model.PerspectiveDefinition;
@@ -104,7 +104,7 @@ public class WorkbenchServicesImpl implements WorkbenchServices {
         if (ioService.exists(perspectivesPath)) {
 
             walkFileTree(perspectivesPath,
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
                                  try {

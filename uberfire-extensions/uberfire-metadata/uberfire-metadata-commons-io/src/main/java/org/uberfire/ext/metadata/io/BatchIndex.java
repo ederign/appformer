@@ -33,7 +33,7 @@ import org.uberfire.java.nio.base.FileSystemId;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.java.nio.file.attribute.FileAttribute;
 import org.uberfire.java.nio.file.attribute.FileAttributeView;
@@ -141,7 +141,7 @@ public final class BatchIndex {
 
             walkFileTree(checkNotNull("root",
                                       root),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {

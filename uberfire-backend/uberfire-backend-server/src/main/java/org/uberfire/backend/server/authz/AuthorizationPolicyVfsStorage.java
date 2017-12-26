@@ -36,7 +36,7 @@ import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.security.authz.AuthorizationPolicy;
 import org.uberfire.security.authz.PermissionManager;
@@ -111,7 +111,7 @@ public class AuthorizationPolicyVfsStorage implements AuthorizationPolicyStorage
         AuthorizationPolicyMarshaller marshaller = new AuthorizationPolicyMarshaller();
 
         walkFileTree(authzPath,
-                     new SimpleFileVisitor<Path>() {
+                     new FileVisitor<Path>() {
                          @Override
                          public FileVisitResult visitFile(final Path file,
                                                           final BasicFileAttributes attrs) throws IOException {

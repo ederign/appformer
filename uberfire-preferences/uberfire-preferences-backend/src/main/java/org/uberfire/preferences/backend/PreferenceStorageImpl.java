@@ -34,7 +34,7 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.IOException;
 import org.uberfire.java.nio.file.FileVisitResult;
 import org.uberfire.java.nio.file.Path;
-import org.uberfire.java.nio.file.SimpleFileVisitor;
+import org.uberfire.java.nio.file.FileVisitor;
 import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.preferences.shared.PreferenceScope;
 import org.uberfire.preferences.shared.PreferenceScopeFactory;
@@ -168,7 +168,7 @@ public class PreferenceStorageImpl implements PreferenceStorage {
         if (ioService.exists(path)) {
             walkFileTree(checkNotNull("path",
                                       path),
-                         new SimpleFileVisitor<Path>() {
+                         new FileVisitor<Path>() {
                              @Override
                              public FileVisitResult visitFile(final Path file,
                                                               final BasicFileAttributes attrs) throws IOException {
