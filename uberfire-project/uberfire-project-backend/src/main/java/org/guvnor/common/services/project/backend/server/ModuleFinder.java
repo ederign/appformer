@@ -87,7 +87,12 @@ public class ModuleFinder {
             final org.uberfire.java.nio.file.Path pomPath = folderPath.resolve(POM_PATH);
 
             if (Files.exists(pomPath)) {
-                addModule(resourceResolver.resolveModule(Paths.convert(pomPath)));
+                final Module module = resourceResolver.resolveModule(Paths.convert(pomPath));
+                if (module != null) {
+                    addModule(module);
+                } else if (checkModulesFromFolders) {
+                    lookForModulesFromFolders(folderPath);
+                }
             } else if (checkModulesFromFolders) {
                 lookForModulesFromFolders(folderPath);
             }
