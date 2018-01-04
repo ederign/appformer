@@ -17,6 +17,7 @@ package org.guvnor.common.services.project.backend.server;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,7 +28,6 @@ import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.guvnor.common.services.project.project.WorkspaceProjectMigrationService;
 import org.guvnor.common.services.project.service.ModuleService;
 import org.guvnor.common.services.project.service.WorkspaceProjectService;
-import org.guvnor.structure.organizationalunit.OrganizationalUnit;
 import org.guvnor.structure.organizationalunit.OrganizationalUnitService;
 import org.guvnor.structure.repositories.Branch;
 import org.guvnor.structure.repositories.Repository;
@@ -44,7 +44,6 @@ public class WorkspaceProjectMigrationServiceImpl
 
     private WorkspaceProjectService workspaceProjectService;
     private RepositoryService repositoryService;
-    private OrganizationalUnitService organizationalUnitService;
     private Event<NewProjectEvent> newProjectEvent;
     private RepositoryCopier repositoryCopier;
     private ModuleService<? extends Module> moduleService;
@@ -56,14 +55,13 @@ public class WorkspaceProjectMigrationServiceImpl
     @Inject
     public WorkspaceProjectMigrationServiceImpl(final WorkspaceProjectService workspaceProjectService,
                                                 final RepositoryService repositoryService,
-                                                final OrganizationalUnitService organizationalUnitService,
+                                                final OrganizationalUnitService organizationalUnitService, // TODO remove unused
                                                 final Event<NewProjectEvent> newProjectEvent,
                                                 final RepositoryCopier repositoryCopier,
                                                 final ModuleService<? extends Module> moduleService,
                                                 final @Named("ioStrategy") IOService ioService) {
         this.workspaceProjectService = workspaceProjectService;
         this.repositoryService = repositoryService;
-        this.organizationalUnitService = organizationalUnitService;
         this.newProjectEvent = newProjectEvent;
         this.repositoryCopier = repositoryCopier;
         this.moduleService = moduleService;
@@ -87,7 +85,6 @@ public class WorkspaceProjectMigrationServiceImpl
         public void migrate() {
 
             copyModulesToRepositories();
-            addProjectsToOUs();
             fireNewProjectEvents();
         }
 
@@ -95,15 +92,6 @@ public class WorkspaceProjectMigrationServiceImpl
             for (final Repository repository : newRepositories.values()) {
                 final WorkspaceProject newWorkspaceProject = workspaceProjectService.resolveProject(repository);
                 newProjectEvent.fire(new NewProjectEvent(newWorkspaceProject));
-            }
-        }
-
-        private void addProjectsToOUs() {
-            for (final OrganizationalUnit organizationalUnit : organizationalUnitService.getOrganizationalUnits(legacyWorkspaceProject.getRepository())) {
-                for (final Repository repository : newRepositories.values()) {
-                    organizationalUnitService.addRepository(organizationalUnit,
-                                                            repository);
-                }
             }
         }
 
@@ -127,7 +115,7 @@ public class WorkspaceProjectMigrationServiceImpl
                                                       final Module module) {
             final Repository targetRepository = newRepositories.get(module.getModuleName());
 
-            final URI uri = URI.create("default://" + branch.getName() + "@" + targetRepository.getAlias());
+            final URI uri = URI.create("default://" + branch.getName() + "@" + targetRepository.getSpace() + "/" + targetRepository.getAlias());
             final Path targetBranchRoot = ioService.get(uri);
 
             repositoryCopier.copy(module.getRootPath(),

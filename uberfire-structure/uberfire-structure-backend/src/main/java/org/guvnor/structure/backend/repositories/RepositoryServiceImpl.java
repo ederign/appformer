@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -28,6 +28,7 @@ import org.guvnor.common.services.backend.exceptions.ExceptionUtilities;
 import org.guvnor.structure.backend.backcompat.BackwardCompatibleUtil;
 import org.guvnor.structure.organizationalunit.OrganizationalUnit;
 import org.guvnor.structure.organizationalunit.OrganizationalUnitService;
+import org.guvnor.structure.repositories.Branch;
 import org.guvnor.structure.repositories.GitMetadataStore;
 import org.guvnor.structure.repositories.NewRepositoryEvent;
 import org.guvnor.structure.repositories.Repository;
@@ -104,6 +105,7 @@ public class RepositoryServiceImpl implements RepositoryService {
     @Inject
     private SessionInfo sessionInfo;
 
+    @Override
     public RepositoryInfo getRepositoryInfo(final String alias) {
         final Repository repo = getRepository(alias);
         String ouName = null;
@@ -279,11 +281,8 @@ public class RepositoryServiceImpl implements RepositoryService {
             if (repo != null) {
                 repositoryRemovedEvent.fire(new RepositoryRemovedEvent(repo));
 
-                if(repo.getDefaultBranch().isPresent()){
-                    throw new IllegalStateException("Repository should have at least one branch.");
-                }
-
-                ioService.delete(convert(repo.getDefaultBranch().get().getPath()).getFileSystem().getPath(null));
+                Branch defaultBranch = repo.getDefaultBranch().orElseThrow(() -> new IllegalStateException("Repository should have at least one branch."));
+                ioService.delete(convert(defaultBranch.getPath()).getFileSystem().getPath(null));
             }
 
             //Remove reference to Repository from Organizational Units
