@@ -15,8 +15,6 @@
  */
 package org.uberfire.backend.server.spaces;
 
-import java.net.URI;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.uberfire.spaces.SpacesAPI;
@@ -25,8 +23,6 @@ import static org.junit.Assert.*;
 
 public class SpacesAPIImplTest {
 
-
-    //FIXME define better this interfacs
     SpacesAPIImpl spaces;
 
     @Before
@@ -35,24 +31,14 @@ public class SpacesAPIImplTest {
     }
 
     @Test
-    public void labs() {
-        URI uri = URI.create("default://bla");
-        System.out.println(uri.getScheme());
-
-        uri = URI.create("git://bla");
-        System.out.println(uri.getScheme());
-    }
-
-    @Test
     public void resolveFileSystemURI() {
-        assertEquals("default://system/system",
-                     spaces.resolveFileSystemURI("default",
-                                                 "system",
-                                                 "system").toString());
 
         assertEquals("default://system/system",
-                     spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                 SpacesAPIImpl.Space.DEFAULT,
+                     spaces.resolveFileSystemURI(SpacesAPI.Scheme.DEFAULT,
+                                                 SpacesAPI.DEFAULT_SPACE,
                                                  "system").toString());
     }
+
+
+    //TODO eder
 }

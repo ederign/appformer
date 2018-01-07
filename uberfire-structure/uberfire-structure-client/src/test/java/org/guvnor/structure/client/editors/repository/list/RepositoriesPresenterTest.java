@@ -36,6 +36,7 @@ import org.mockito.stubbing.Answer;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mocks.CallerMock;
 import org.uberfire.mocks.EventSourceMock;
+import org.uberfire.spaces.Space;
 import org.uberfire.workbench.events.NotificationEvent;
 
 import static org.junit.Assert.*;
@@ -215,7 +216,7 @@ public class RepositoriesPresenterTest {
     private Repository createRepository(String alias,
                                         String space) {
         GitRepository repository = new GitRepository(alias,
-                                                     space);
+                                                     new Space(space));
         repository.addBranch(new Branch("master",
                                         branchPath));
         return repository;

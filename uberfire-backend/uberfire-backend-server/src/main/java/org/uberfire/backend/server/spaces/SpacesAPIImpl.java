@@ -16,38 +16,45 @@
 package org.uberfire.backend.server.spaces;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
-import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
+import org.uberfire.spaces.Space;
+import org.uberfire.spaces.SpacesAPI;
 
 @ApplicationScoped
 @Startup(StartupType.BOOTSTRAP)
 public class SpacesAPIImpl implements SpacesAPI {
 
-    public URI resolveFileSystemURI(String scheme,
-                                    String space,
-                                    String fsName) {
-        String uri = scheme + "://" + space + "/" + fsName;
+    private Map<String, Space> spaces = new HashMap<>();
 
-        return URI.create(uri);
+    @PostConstruct
+    public void setup() {
+        //in future load all spaces here by default
+        spaces.put(SpacesAPI.DEFAULT_SPACE_NAME,
+                   SpacesAPI.DEFAULT_SPACE);
     }
+
+    @Override
+    public Space getSpace(String name) {
+        //TODO put if absence
+        spaces.putIfAbsent(name,
+                           new Space(name));
+        return spaces.get(name);
+    }
+
 
     public URI resolveFileSystemURI(Scheme scheme,
                                     Space space,
                                     String fsName) {
-        String uri = scheme + "://" + space + "/" + fsName;
 
-        return URI.create(uri);
+        URI uri = URI.create(SpacesAPI.resolveFileSystemPath(scheme,
+                                                             space,
+                                                             fsName));
+        return uri;
     }
-
-    public URI resolveFileSystemURI(Scheme scheme,
-                                    String space,
-                                    String fsName) {
-        String uri = scheme + "://" + space + "/" + fsName;
-
-        return URI.create(uri);
-    }
-
 }

@@ -144,8 +144,8 @@ public class DataSetDefRegistryCDI extends DataSetDefRegistryImpl implements CSV
 
     protected void initFileSystem() {
         try {
-            fileSystem = ioService.newFileSystem(spacesAPI.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                                SpacesAPIImpl.Space.DEFAULT,
+            fileSystem = ioService.newFileSystem(spacesAPI.resolveFileSystemURI(SpacesAPI.Scheme.DEFAULT,
+                                                                                SpacesAPI.DEFAULT_SPACE,
                                                                                 "datasets"),
                                                  new HashMap<String, Object>() {{
                                                      put("init",
@@ -154,8 +154,8 @@ public class DataSetDefRegistryCDI extends DataSetDefRegistryImpl implements CSV
                                                          Boolean.TRUE);
                                                  }});
         } catch (FileSystemAlreadyExistsException e) {
-            fileSystem = ioService.getFileSystem(spacesAPI.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                                SpacesAPIImpl.Space.DEFAULT,
+            fileSystem = ioService.getFileSystem(spacesAPI.resolveFileSystemURI(SpacesAPI.Scheme.DEFAULT,
+                                                                                SpacesAPI.DEFAULT_SPACE,
                                                                                 "datasets"));
         }
         this.root = fileSystem.getRootDirectories().iterator().next();

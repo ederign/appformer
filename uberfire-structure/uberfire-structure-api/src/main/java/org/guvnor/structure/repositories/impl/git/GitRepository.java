@@ -29,6 +29,7 @@ import org.guvnor.structure.repositories.Repository;
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.security.ResourceType;
+import org.uberfire.spaces.Space;
 import org.uberfire.spaces.SpacesAPI;
 
 import static org.uberfire.spaces.SpacesAPI.Scheme.GIT;
@@ -43,7 +44,7 @@ public class GitRepository
     private final List<PublicURI> publicURIs = new ArrayList<PublicURI>();
     private final Map<String, Branch> branches = new HashMap<>();
     private String alias = null;
-    private String space = SpacesAPI.Space.DEFAULT.toString();
+    private Space space;
     private Path root;
 
     private Collection<String> groups = new ArrayList<String>();
@@ -53,13 +54,13 @@ public class GitRepository
     }
 
     public GitRepository(final String alias,
-                         String space) {
+                         Space space) {
         this.alias = alias;
         this.space = space;
     }
 
     public GitRepository(final String alias,
-                         final String space,
+                         final Space space,
                          final List<PublicURI> publicURIs) {
         this(alias,
              space);
@@ -75,7 +76,7 @@ public class GitRepository
     }
 
     @Override
-    public String getSpace() {
+    public Space getSpace() {
         return space;
     }
 
@@ -131,10 +132,10 @@ public class GitRepository
     @Override
     public String getUri() {
 
-        String alias = SpacesAPI.sanitizeFileSystemName(getAlias());
-        return SpacesAPI.resolveFileSystem(getScheme(),
-                                           getSpace(),
-                                           alias).toString();
+        String fsName = SpacesAPI.sanitizeFileSystemName(getAlias());
+        return SpacesAPI.resolveFileSystemPath(getScheme(),
+                                               getSpace(),
+                                               fsName).toString();
     }
 
     @Override

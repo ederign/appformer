@@ -33,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mocks.EventSourceMock;
+import org.uberfire.spaces.Space;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -114,11 +115,11 @@ public class WorkspaceWorkspaceProjectContextTest {
     public void testIgnoreRepositoryDeletedEventIfTheActiveRepositoryWasNotDeleted() throws Exception {
 
         GitRepository deletedRepository = new GitRepository("deleted repo",
-                                                            "space");
+                                                            new Space("space"));
 
         final WorkspaceProject activeWorkspaceProject = new WorkspaceProject(mock(OrganizationalUnit.class),
                                                                              new GitRepository("active repo",
-                                                                                               "space"),
+                                                                                               new Space("space")),
                                                                              mock(Branch.class),
                                                                              mock(Module.class));
         context.setActiveWorkspaceProject(activeWorkspaceProject);

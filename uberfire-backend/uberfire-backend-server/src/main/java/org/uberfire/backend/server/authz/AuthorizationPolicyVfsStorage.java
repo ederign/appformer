@@ -26,7 +26,6 @@ import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.backend.authz.AuthorizationPolicyStorage;
 import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 import org.uberfire.io.IOService;
@@ -41,6 +40,7 @@ import org.uberfire.java.nio.file.attribute.BasicFileAttributes;
 import org.uberfire.security.authz.AuthorizationPolicy;
 import org.uberfire.security.authz.PermissionManager;
 import org.uberfire.security.impl.authz.AuthorizationPolicyBuilder;
+import org.uberfire.spaces.SpacesAPI;
 
 import static org.kie.soup.commons.validation.PortablePreconditions.checkNotNull;
 import static org.uberfire.java.nio.file.Files.walkFileTree;
@@ -93,7 +93,7 @@ public class AuthorizationPolicyVfsStorage implements AuthorizationPolicyStorage
     public void initFileSystem() {
         try {
             fileSystem = ioService.newFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                             SpacesAPIImpl.Space.DEFAULT,
+                                                                             SpacesAPI.DEFAULT_SPACE,
                                                                              "security"),
                                                  new HashMap<String, Object>() {{
                                                      put("init",
@@ -103,7 +103,7 @@ public class AuthorizationPolicyVfsStorage implements AuthorizationPolicyStorage
                                                  }});
         } catch (FileSystemAlreadyExistsException e) {
             fileSystem = ioService.getFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                             SpacesAPIImpl.Space.DEFAULT,
+                                                                             SpacesAPI.DEFAULT_SPACE,
                                                                              "security"));
         }
         this.root = fileSystem.getRootDirectories().iterator().next();

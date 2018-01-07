@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.guvnor.structure.security.RepositoryResourceType;
+import org.uberfire.spaces.Space;
 import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.commons.data.Cacheable;
@@ -41,7 +42,7 @@ public interface Repository
 
     SpacesAPI.Scheme getScheme();
 
-    String getSpace();
+    Space getSpace();
 
     Map<String, Object> getEnvironment();
 

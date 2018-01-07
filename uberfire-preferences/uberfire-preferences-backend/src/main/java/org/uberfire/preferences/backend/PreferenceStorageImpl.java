@@ -27,7 +27,6 @@ import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.spaces.SpacesAPI;
 import org.uberfire.annotations.Customizable;
 import org.uberfire.backend.server.io.object.ObjectStorage;
 import org.uberfire.backend.server.spaces.SpacesAPIImpl;
@@ -45,6 +44,7 @@ import org.uberfire.preferences.shared.impl.PreferenceScopeResolutionStrategyInf
 import org.uberfire.preferences.shared.impl.PreferenceScopedValue;
 import org.uberfire.preferences.shared.impl.exception.InvalidPreferenceScopeException;
 import org.uberfire.rpc.SessionInfo;
+import org.uberfire.spaces.SpacesAPI;
 
 import static org.kie.soup.commons.validation.PortablePreconditions.checkNotNull;
 import static org.uberfire.java.nio.file.Files.walkFileTree;
@@ -89,8 +89,8 @@ public class PreferenceStorageImpl implements PreferenceStorage {
     @PostConstruct
     public void init() {
         objectStorage.init(spaces.resolveFileSystemURI(SpacesAPI.Scheme.GIT,
-                                                          SpacesAPIImpl.Space.DEFAULT,
-                                                          "preferences"));
+                                                       SpacesAPI.DEFAULT_SPACE,
+                                                       "preferences"));
     }
 
     @Override

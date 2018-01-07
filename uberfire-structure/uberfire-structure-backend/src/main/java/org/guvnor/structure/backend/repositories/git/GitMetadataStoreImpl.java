@@ -51,8 +51,8 @@ public class GitMetadataStoreImpl implements GitMetadataStore {
     @PostConstruct
     public void init() {
 
-        metadataFS = spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                    SpacesAPIImpl.Space.DEFAULT,
+        metadataFS = spaces.resolveFileSystemURI(SpacesAPI.Scheme.DEFAULT,
+                                                 SpacesAPI.DEFAULT_SPACE,
                                                     "metadata");
         if (logger.isDebugEnabled()) {
             logger.debug("Initializing GitMetadataStoreImpl {}",

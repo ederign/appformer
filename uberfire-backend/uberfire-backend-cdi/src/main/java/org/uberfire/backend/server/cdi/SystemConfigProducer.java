@@ -285,16 +285,12 @@ public class SystemConfigProducer implements Extension {
                                                                         IOService.class,
                                                                         _ctx);
 
-                final Bean<SpacesAPIImpl> spacesBean = (Bean<SpacesAPIImpl>) bm.getBeans(SpacesAPIImpl.class).iterator().next();
-                final CreationalContext<SpacesAPIImpl> spacesCtx = bm.createCreationalContext(spacesBean);
-                final SpacesAPIImpl spaces = (SpacesAPIImpl) bm.getReference(spacesBean,
-                                                                             SpacesAPIImpl.class,
-                                                                             spacesCtx);
+                final SpacesAPIImpl spaces = getSpaces(bm);
                 FileSystem fs;
                 try {
                     //@Question porcelli: this should be default right?
                     fs = ioService.newFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                                SpacesAPIImpl.Space.DEFAULT,
+                                                                                SpacesAPI.DEFAULT_SPACE,
                                                                                 fsName),
                                                  new HashMap<String, Object>() {{
                                                      put("init",
@@ -304,7 +300,7 @@ public class SystemConfigProducer implements Extension {
                                                  }});
                 } catch (FileSystemAlreadyExistsException e) {
                     fs = ioService.getFileSystem(spaces.resolveFileSystemURI(SpacesAPIImpl.Scheme.DEFAULT,
-                                                                             SpacesAPIImpl.Space.DEFAULT,
+                                                                             SpacesAPIImpl.DEFAULT_SPACE,
                                                                              fsName));
                 }
 
@@ -327,6 +323,14 @@ public class SystemConfigProducer implements Extension {
                 ctx.release();
             }
         };
+    }
+
+    SpacesAPIImpl getSpaces(BeanManager bm) {
+        final Bean<SpacesAPIImpl> spacesBean = (Bean<SpacesAPIImpl>) bm.getBeans(SpacesAPIImpl.class).iterator().next();
+        final CreationalContext<SpacesAPIImpl> spacesCtx = bm.createCreationalContext(spacesBean);
+        return (SpacesAPIImpl) bm.getReference(spacesBean,
+                                                                     SpacesAPIImpl.class,
+                                                                     spacesCtx);
     }
 
     private void buildIOStrategy(final AfterBeanDiscovery abd,

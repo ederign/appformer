@@ -25,6 +25,7 @@ import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.java.nio.base.version.VersionRecord;
+import org.uberfire.spaces.Space;
 
 /**
  * Utility class for client side testing.
@@ -105,6 +106,15 @@ public class RepositoryServiceCallerMock
         @Override
         public Repository getRepository(String alias) {
             Repository result = repositoryService.getRepository(alias);
+            remoteCallback.callback(result);
+            return result;
+        }
+
+        @Override
+        public Repository getRepositoryFromSpace(Space currentSpace,
+                                                 String alias) {
+            Repository result = repositoryService.getRepositoryFromSpace(currentSpace,
+                                                                         alias);
             remoteCallback.callback(result);
             return result;
         }

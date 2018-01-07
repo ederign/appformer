@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-    */
+ */
 package org.guvnor.structure.backend.repositories.git;
 
 import java.net.URI;
@@ -34,6 +34,7 @@ import org.guvnor.structure.server.config.SecureConfigItem;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemAlreadyExistsException;
+import org.uberfire.spaces.SpacesAPI;
 
 import static org.uberfire.backend.server.util.Paths.convert;
 
@@ -41,19 +42,25 @@ public class GitRepositoryBuilder {
 
     private final IOService ioService;
     private final PasswordService secureService;
+    private SpacesAPI spacesAPI;
     private GitRepository repo;
 
     public GitRepositoryBuilder(final IOService ioService,
-                                final PasswordService secureService) {
+                                final PasswordService secureService,
+                                final SpacesAPI spacesAPI) {
         this.ioService = ioService;
         this.secureService = secureService;
+        this.spacesAPI = spacesAPI;
     }
 
     public Repository build(final ConfigGroup repoConfig) {
 
         ConfigItem space = repoConfig.getConfigItem(EnvironmentParameters.SPACE);
+        if (space == null) {
+            throw new IllegalStateException("Repository " + repoConfig.getName() + " space is not valid");
+        }
         repo = new GitRepository(repoConfig.getName(),
-                                 space.getValue().toString());
+                                 spacesAPI.getSpace(space.getValue().toString()));
 
         if (!repo.isValid()) {
             throw new IllegalStateException("Repository " + repoConfig.getName() + " not valid");

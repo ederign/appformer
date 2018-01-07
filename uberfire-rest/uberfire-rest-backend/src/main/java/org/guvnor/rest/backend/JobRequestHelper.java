@@ -51,6 +51,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.io.IOService;
+import org.uberfire.spaces.SpacesAPI;
 
 /**
  * Utility class to perform various functions for the REST service involving backend services
@@ -71,6 +72,9 @@ public class JobRequestHelper {
 
     @Inject
     private BuildService buildService;
+
+    @Inject
+    private SpacesAPI spacesAPI;
 
     @Inject
     @Named("ioStrategy")
@@ -113,11 +117,9 @@ public class JobRequestHelper {
 
             // username and password are optional
             final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
-            //TODO which space?
             if (repository.getUserName() != null && !"".equals(repository.getUserName())) {
                 configuration.setUserName(repository.getUserName());
             }
-            //TODO which space?
             if (repository.getPassword() != null && !"".equals(repository.getPassword())) {
                 configuration.setPassword(repository.getPassword());
             }
@@ -483,7 +485,7 @@ public class JobRequestHelper {
                     return result;
                 }
                 GitRepository repo = new GitRepository(repositoryAlias,
-                                                       organizationalUnit.getName());
+                                                       spacesAPI.getSpace(organizationalUnit.getName()));
                 repositories.add(repo);
             }
             organizationalUnit = organizationalUnitService.createOrganizationalUnit(organizationalUnitName,
@@ -570,7 +572,7 @@ public class JobRequestHelper {
                                                                            null);
 
         GitRepository repo = new GitRepository(repositoryAlias,
-                                               organizationalUnit.getName());
+                                               spacesAPI.getSpace(organizationalUnit.getName()));
         try {
             organizationalUnitService.addRepository(organizationalUnit,
                                                     repo);
@@ -608,7 +610,7 @@ public class JobRequestHelper {
                                                                            null,
                                                                            null);
         GitRepository repo = new GitRepository(repositoryAlias,
-                                               organizationalUnit.getName());
+                                               spacesAPI.getSpace(organizationalUnit.getName()));
         try {
             organizationalUnitService.removeRepository(organizationalUnit,
                                                        repo);

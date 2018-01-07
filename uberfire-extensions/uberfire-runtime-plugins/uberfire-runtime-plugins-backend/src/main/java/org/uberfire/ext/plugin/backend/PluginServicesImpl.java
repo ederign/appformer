@@ -90,37 +90,55 @@ public class PluginServicesImpl implements PluginServices {
 
     private static final String MENU_ITEM_DELIMITER = " / ";
     protected Gson gson;
-    @Inject
-    @Named("ioStrategy")
     private IOService ioService;
-    @Inject
-    @Named("MediaServletURI")
     private Instance<MediaServletURI> mediaServletURI;
-    @Inject
     private transient SessionInfo sessionInfo;
-    @Inject
     private Event<PluginAdded> pluginAddedEvent;
-    @Inject
     private Event<PluginDeleted> pluginDeletedEvent;
-    @Inject
     private Event<PluginSaved> pluginSavedEvent;
-    @Inject
     private Event<PluginRenamed> pluginRenamedEvent;
-    @Inject
     private Event<MediaDeleted> mediaDeletedEvent;
-    @Inject
     private DefaultFileNameValidator defaultFileNameValidator;
-    @Inject
     private User identity;
-    @Inject
-    @Named("pluginsFS")
     private FileSystem fileSystem;
     private Path root;
+
+    public PluginServicesImpl() {
+    }
+
+    @Inject
+    public PluginServicesImpl(@Named("ioStrategy") IOService ioService,
+                              @Named("MediaServletURI") Instance<MediaServletURI> mediaServletURI,
+                              SessionInfo sessionInfo,
+                              Event<PluginAdded> pluginAddedEvent,
+                              Event<PluginDeleted> pluginDeletedEvent,
+                              Event<PluginSaved> pluginSavedEvent,
+                              Event<PluginRenamed> pluginRenamedEvent,
+                              Event<MediaDeleted> mediaDeletedEvent,
+                              DefaultFileNameValidator defaultFileNameValidator,
+                              User identity,
+                              @Named("pluginsFS") FileSystem fileSystem) {
+        this.ioService = ioService;
+        this.mediaServletURI = mediaServletURI;
+        this.sessionInfo = sessionInfo;
+        this.pluginAddedEvent = pluginAddedEvent;
+        this.pluginDeletedEvent = pluginDeletedEvent;
+        this.pluginSavedEvent = pluginSavedEvent;
+        this.pluginRenamedEvent = pluginRenamedEvent;
+        this.mediaDeletedEvent = mediaDeletedEvent;
+        this.defaultFileNameValidator = defaultFileNameValidator;
+        this.identity = identity;
+        this.fileSystem = fileSystem;
+    }
 
     @PostConstruct
     public void init() {
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        this.root = fileSystem.getRootDirectories().iterator().next();
+        this.root = resolveRoot();
+    }
+
+    Path resolveRoot() {
+        return fileSystem.getRootDirectories().iterator().next();
     }
 
     @Override
