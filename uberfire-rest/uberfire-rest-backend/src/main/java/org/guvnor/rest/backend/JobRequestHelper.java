@@ -113,9 +113,11 @@ public class JobRequestHelper {
 
             // username and password are optional
             final RepositoryEnvironmentConfigurations configuration = new RepositoryEnvironmentConfigurations();
+            //TODO which space?
             if (repository.getUserName() != null && !"".equals(repository.getUserName())) {
                 configuration.setUserName(repository.getUserName());
             }
+            //TODO which space?
             if (repository.getPassword() != null && !"".equals(repository.getPassword())) {
                 configuration.setPassword(repository.getPassword());
             }

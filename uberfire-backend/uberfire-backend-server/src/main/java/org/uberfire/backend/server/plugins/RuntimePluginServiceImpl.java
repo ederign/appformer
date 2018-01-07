@@ -60,6 +60,10 @@ public class RuntimePluginServiceImpl implements RuntimePluginService {
     @Inject
     SpacesAPIImpl spaces;
 
+    @PostConstruct
+    public void a(){
+        System.out.println("");
+    }
     @Override
     public Collection<String> listFrameworksContent() {
         return directoryContent("frameworks",
