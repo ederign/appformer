@@ -16,6 +16,7 @@
 package org.uberfire.backend.server.spaces;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -56,5 +57,10 @@ public class SpacesAPIImpl implements SpacesAPI {
                                                              space,
                                                              fsName));
         return uri;
+    }
+
+    @Override
+    public Collection<Space> getSpaces() {
+        return spaces.values();
     }
 }

@@ -1,5 +1,7 @@
 package org.uberfire.spaces;
 
+import java.util.Collection;
+
 public interface SpacesAPI {
 
     String DEFAULT_SPACE_NAME = "system";
@@ -19,6 +21,8 @@ public interface SpacesAPI {
     }
 
     Space getSpace(String name);
+
+    Collection<Space> getSpaces();
 
     enum Scheme {
         DEFAULT("default"),

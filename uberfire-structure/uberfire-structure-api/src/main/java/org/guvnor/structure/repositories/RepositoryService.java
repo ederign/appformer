@@ -29,7 +29,8 @@ import org.uberfire.spaces.Space;
  * This RepositoryService is dependent on the WorkspaceProjectContext.
  * It uses WorkspaceProjectContext in order to lookup for the current space.
  *
- * The only exception is getRepositoryFromSpace(space, alias) method.
+ * The only exception is getRepositoryFromSpace(space, alias) and
+ * getAllRepositoriesFromAllSpaces methods.
  *
  */
 public interface RepositoryService {
@@ -56,6 +57,11 @@ public interface RepositoryService {
      * Get all the repositories. Security checks are omitted.
      */
     Collection<Repository> getAllRepositories();
+
+    /**
+     * Get all the repositories from all Spaces. Security checks are omitted.
+     */
+    Collection<Repository> getAllRepositoriesFromAllSpaces();
 
     /**
      * Get only those repositories available within the current security context.
