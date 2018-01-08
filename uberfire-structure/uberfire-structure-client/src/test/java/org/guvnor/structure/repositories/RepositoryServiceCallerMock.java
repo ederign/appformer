@@ -134,8 +134,8 @@ public class RepositoryServiceCallerMock
         }
 
         @Override
-        public Collection<Repository> getAllRepositoriesFromAllSpaces() {
-            Collection<Repository> result = repositoryService.getAllRepositoriesFromAllSpaces();
+        public Collection<Repository> getAllRepositoriesFromAllUserSpaces() {
+            Collection<Repository> result = repositoryService.getAllRepositoriesFromAllUserSpaces();
             remoteCallback.callback(result);
             return result;
         }

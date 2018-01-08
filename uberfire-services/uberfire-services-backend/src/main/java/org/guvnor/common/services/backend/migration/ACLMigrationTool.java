@@ -108,7 +108,7 @@ public class ACLMigrationTool {
 
     public void migrateRepositories(final AuthorizationPolicy policy) {
 
-        final Collection<Repository> itemList = repositoryService.getAllRepositories();
+        final Collection<Repository> itemList = repositoryService.getAllRepositoriesFromAllUserSpaces();
 
         for (final Repository repository : itemList) {
             final Permission permission = permissionManager.createPermission(repository,

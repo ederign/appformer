@@ -59,9 +59,9 @@ public interface RepositoryService {
     Collection<Repository> getAllRepositories();
 
     /**
-     * Get all the repositories from all Spaces. Security checks are omitted.
+     * Get all the repositories from all user spaces. Security checks are omitted.
      */
-    Collection<Repository> getAllRepositoriesFromAllSpaces();
+    Collection<Repository> getAllRepositoriesFromAllUserSpaces();
 
     /**
      * Get only those repositories available within the current security context.

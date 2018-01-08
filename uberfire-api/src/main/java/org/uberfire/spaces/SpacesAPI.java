@@ -24,6 +24,8 @@ public interface SpacesAPI {
 
     Collection<Space> getSpaces();
 
+    Collection<Space> getUserSpaces();
+
     enum Scheme {
         DEFAULT("default"),
         GIT("git"),

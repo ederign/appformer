@@ -63,4 +63,12 @@ public class SpacesAPIImpl implements SpacesAPI {
     public Collection<Space> getSpaces() {
         return spaces.values();
     }
+
+    @Override
+    public Collection<Space> getUserSpaces() {
+        final Collection<Space> userSpaces = spaces.values();
+        userSpaces.remove(SpacesAPI.DEFAULT_SPACE);
+
+        return userSpaces;
+    }
 }

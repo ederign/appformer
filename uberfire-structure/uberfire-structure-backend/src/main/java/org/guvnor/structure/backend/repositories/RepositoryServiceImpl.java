@@ -235,11 +235,10 @@ public class RepositoryServiceImpl implements RepositoryService {
     }
 
     @Override
-    public Collection<Repository> getAllRepositoriesFromAllSpaces() {
-
+    public Collection<Repository> getAllRepositoriesFromAllUserSpaces() {
         List<Repository> allRepos = new ArrayList<>();
 
-        for (Space space : spacesAPI.getSpaces()) {
+        for (Space space : spacesAPI.getUserSpaces()) {
             allRepos.addAll(configuredRepositories.getAllConfiguredRepositories(space));
         }
 
