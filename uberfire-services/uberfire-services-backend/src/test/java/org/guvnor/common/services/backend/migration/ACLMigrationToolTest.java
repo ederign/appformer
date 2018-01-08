@@ -90,7 +90,7 @@ public class ACLMigrationToolTest {
         final Path repo1root = mock(Path.class);
 
         when(organizationalUnitService.getAllOrganizationalUnits()).thenReturn(Collections.singleton(orgUnit1));
-        when(repositoryService.getAllRepositories()).thenReturn(Collections.singleton(repo1));
+        when(repositoryService.getAllRepositoriesFromAllUserSpaces()).thenReturn(Collections.singleton(repo1));
 
         when(orgUnit1.getIdentifier()).thenReturn("orgUnit1");
         when(orgUnit1.getResourceType()).thenReturn(OrganizationalUnit.RESOURCE_TYPE);
