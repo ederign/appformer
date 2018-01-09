@@ -39,8 +39,12 @@ import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.spaces.Space;
 import org.uberfire.workbench.events.NotificationEvent;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(GwtMockitoTestRunner.class)
 public class RepositoriesPresenterTest {
@@ -63,14 +67,10 @@ public class RepositoriesPresenterTest {
     @Mock
     private Path branchPath;
 
-    private Repository r1 = createRepository("r1",
-                                             "space");
-    private Repository r2 = createRepository("r2",
-                                             "space");
-    private Repository r3 = createRepository("r3",
-                                             "space");
-    private Repository r4 = createRepository("r4",
-                                             "space");
+    private Repository r1;
+    private Repository r2;
+    private Repository r3;
+    private Repository r4;
 
     @Mock
     private RepositoryItemView itemView1;
@@ -94,6 +94,15 @@ public class RepositoriesPresenterTest {
 
     @Before
     public void init() {
+
+        r1 = createRepository("r1",
+                              "space");
+        r2 = createRepository("r2",
+                              "space");
+        r3 = createRepository("r3",
+                              "space");
+        r4 = createRepository("r4",
+                              "space");
 
         repositories = new ArrayList<>();
 

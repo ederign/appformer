@@ -172,13 +172,6 @@ public class WorkspaceWorkspaceProjectMigrationServiceImplTest {
     }
 
     @Test
-    public void addNewRepositoriesToOUs() throws Exception {
-        verify(organizationalUnitService,
-               times(2)).addRepository(eq(organizationalUnit),
-                                       any(Repository.class));
-    }
-
-    @Test
     public void fireNewProjectEvents() throws Exception {
         verify(newProjectEvent,
                times(2)).fire(newProjectEventArgumentCaptor.capture());
