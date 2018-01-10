@@ -137,7 +137,7 @@ public class AbstractResourceResolverTest {
         final Path path = mock(Path.class);
         doReturn(path).when(project).getRootPath();
 
-        when(path.toURI()).thenReturn("default:///myproject/");
+        when(path.toURI()).thenReturn("file:///myproject/");
         doReturn("com.group").when(gav).getGroupId();
         doReturn("package").when(gav).getArtifactId();
 
@@ -147,7 +147,7 @@ public class AbstractResourceResolverTest {
 
         verify(resourceResolver).resolvePackage(packagePathArgumentCaptor.capture());
         final Path packagePath = packagePathArgumentCaptor.getValue();
-        assertEquals("default:///myproject/src/main/resources/com/group/_package",
+        assertEquals("file:///myproject/src/main/resources/com/group/_package",
                      packagePath.toURI());
     }
 

@@ -115,7 +115,7 @@ public class WorkspaceProjectMigrationServiceImpl
                                                       final Module module) {
             final Repository targetRepository = newRepositories.get(module.getModuleName());
 
-            final URI uri = URI.create("default://" + branch.getName() + "@" + targetRepository.getSpace() + "/" + targetRepository.getAlias());
+            final URI uri = URI.create( targetRepository.getScheme().toString() +"://" + branch.getName() + "@" + targetRepository.getSpace() + "/" + targetRepository.getAlias());
             final Path targetBranchRoot = ioService.get(uri);
 
             repositoryCopier.copy(module.getRootPath(),

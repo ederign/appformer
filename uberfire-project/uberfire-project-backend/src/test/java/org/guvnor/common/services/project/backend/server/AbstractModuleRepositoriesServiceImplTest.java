@@ -101,7 +101,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
 
         final Set<MavenRepositoryMetadata> metadata = new HashSet<MavenRepositoryMetadata>();
@@ -144,7 +144,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
 
         final Module module = mock(Module.class);
@@ -189,7 +189,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
         when(ioService.exists(eq(nioPath))).thenReturn(true);
         when(ioService.readAllString(eq(nioPath))).thenReturn(xml);
@@ -230,7 +230,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
         when(ioService.exists(eq(nioPath))).thenReturn(false);
 
@@ -289,7 +289,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
 
         service.save(path,
@@ -325,7 +325,7 @@ public class AbstractModuleRepositoriesServiceImplTest {
                 "</project-repositories>";
 
         final Path path = mock(Path.class);
-        when(path.toURI()).thenReturn("default://p0/project.repositories");
+        when(path.toURI()).thenReturn("file://p0/project.repositories");
         final org.uberfire.java.nio.file.Path nioPath = Paths.convert(path);
         when(ioService.exists(eq(nioPath))).thenReturn(true);
         when(ioService.readAllString(eq(nioPath))).thenReturn(xml);

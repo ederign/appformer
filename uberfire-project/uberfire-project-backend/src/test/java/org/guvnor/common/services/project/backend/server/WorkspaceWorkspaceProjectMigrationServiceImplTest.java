@@ -46,6 +46,7 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.io.IOService;
 import org.uberfire.mocks.EventSourceMock;
+import org.uberfire.spaces.SpacesAPI;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -228,6 +229,7 @@ public class WorkspaceWorkspaceProjectMigrationServiceImplTest {
             public Repository answer(InvocationOnMock invocationOnMock) throws Throwable {
                 final Repository newRepository = mock(Repository.class);
                 doReturn(invocationOnMock.getArguments()[2]).when(newRepository).getAlias();
+                doReturn(SpacesAPI.Scheme.FILE).when(newRepository).getScheme();
                 return newRepository;
             }
         }).when(repositoryService).createRepository(eq(organizationalUnit),

@@ -122,7 +122,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "  <version>0.0.1</version>\n" +
                 "</project>";
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -187,7 +187,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "  </repositories>\n" +
                 "</project>";
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -256,7 +256,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "  </distributionManagement>\n" +
                 "</project>";
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -325,7 +325,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "  </distributionManagement>\n" +
                 "</project>";
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -390,7 +390,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "  </distributionManagement>\n" +
                 "</project>";
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -686,7 +686,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                 "0.0.10");
 
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -727,7 +727,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                     "0.0.11");
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -786,7 +786,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                     "0.0.12");
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -854,7 +854,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                     "0.0.13");
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -927,7 +927,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                     "0.0.14");
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -977,7 +977,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                 "</project>";
 
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+        when(pomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
         when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -1013,7 +1013,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                     "</project>";
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -1067,7 +1067,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                     "</project>";
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -1130,7 +1130,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                     "</project>";
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -1197,7 +1197,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                     "</project>";
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -1275,7 +1275,7 @@ public class ModuleMavenRepositoryResolverImplTest {
     @Test
     public void testGetRepositoriesResolvingArtifact_Disabled2() {
         final Module module = mock(Module.class);
-        doReturn("default://master@a/a%20b").when(module).getIdentifier();
+        doReturn("file://master@a/a%20b").when(module).getIdentifier();
         doCallRealMethod().when(module).getEncodedIdentifier();
         final org.uberfire.backend.vfs.Path vfsPomXmlPath = mock(org.uberfire.backend.vfs.Path.class);
         final String oldSettingsXmlPath = System.getProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY);
@@ -1295,7 +1295,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                                     "0.0.21");
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
@@ -1339,7 +1339,7 @@ public class ModuleMavenRepositoryResolverImplTest {
                     "</project>";
 
             when(module.getPomXMLPath()).thenReturn(vfsPomXmlPath);
-            when(vfsPomXmlPath.toURI()).thenReturn("default://p0/pom.xml");
+            when(vfsPomXmlPath.toURI()).thenReturn("file://p0/pom.xml");
             when(ioService.readAllString(any(Path.class))).thenReturn(pomXml);
 
             System.setProperty(MavenSettings.CUSTOM_SETTINGS_PROPERTY,
