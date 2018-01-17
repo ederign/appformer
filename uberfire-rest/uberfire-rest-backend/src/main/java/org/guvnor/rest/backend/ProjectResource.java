@@ -20,6 +20,7 @@ import static org.guvnor.rest.backend.PermissionConstants.REST_ROLE;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -102,7 +103,6 @@ public class ProjectResource {
         JobResult jobResult = new JobResult();
         jobResult.setJobId(jobId);
         jobResult.setStatus(JobStatus.ACCEPTED);
-        jobManager.putJob(jobResult);
     }
 
     @GET
@@ -156,24 +156,13 @@ public class ProjectResource {
         logger.debug("-----cloneRepository--- , repository name: {}",
                      repository.getName());
 
-        checkOrganizationalUnitExistence(repository.getOrganizationalUnitName());
-
         String id = newId();
         CloneRepositoryRequest jobRequest = new CloneRepositoryRequest();
         jobRequest.setStatus(JobStatus.ACCEPTED);
         jobRequest.setJobId(id);
         jobRequest.setRepository(repository);
-
-        String reqType = repository.getRequestType();
-        if (reqType == null || reqType.trim().isEmpty()
-                || !("new".equals(reqType) || "clone".equals(reqType))) {
-            jobRequest.setStatus(JobStatus.BAD_REQUEST);
-            return Response.status(Status.BAD_REQUEST).entity(jobRequest).variant(defaultVariant).build();
-        } else {
-            addAcceptedJobResult(id);
-            jobRequestObserver.cloneRepositoryRequest(jobRequest);
-            return createAcceptedStatusResponse(jobRequest);
-        }
+        addAcceptedJobResult(id);
+        return createAcceptedStatusResponse(jobRequest);
     }
 
     @POST
@@ -197,10 +186,7 @@ public class ProjectResource {
         jobRequest.setProjectGroupId(project.getGroupId());
         jobRequest.setProjectVersion(project.getVersion());
         jobRequest.setDescription(project.getDescription());
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.createProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -213,27 +199,7 @@ public class ProjectResource {
         logger.info("-----getProjects--- , organizationalUnitName: {}",
                     organizationalUnitName);
 
-        final org.guvnor.structure.organizationalunit.OrganizationalUnit organizationalUnit = organizationalUnitService.getOrganizationalUnit(organizationalUnitName);
-        if (organizationalUnit == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(organizationalUnitName).build());
-        }
-
-        return getProjectResponses(workspaceProjectService.getAllWorkspaceProjects(organizationalUnit));
-    }
-
-    private List<ProjectResponse> getProjectResponses(Collection<WorkspaceProject> workspaceProjects) {
-        final List<ProjectResponse> projectRequests = new ArrayList<>(workspaceProjects.size());
-        for (final WorkspaceProject workspaceProject : workspaceProjects) {
-            final ProjectResponse projectReq = new ProjectResponse();
-            final GAV projectGAV = workspaceProject.getMainModule().getPom().getGav();
-
-            projectReq.setGroupId(projectGAV.getGroupId());
-            projectReq.setVersion(projectGAV.getVersion());
-            projectReq.setName(workspaceProject.getName());
-            projectReq.setDescription(workspaceProject.getMainModule().getPom().getDescription());
-            projectRequests.add(projectReq);
-        }
-        return projectRequests;
+        return Collections.emptyList();
     }
 
     @GET
@@ -243,7 +209,7 @@ public class ProjectResource {
     public Collection<ProjectResponse> getProjects() {
         logger.info("-----getProjects--- ");
 
-        return getProjectResponses(workspaceProjectService.getAllWorkspaceProjects());
+        return Collections.emptyList();
     }
 
     @DELETE
@@ -262,10 +228,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setProjectName(projectName);
         jobRequest.setSpaceName(spaceName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.deleteProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -278,15 +241,7 @@ public class ProjectResource {
         logger.debug("-----getProject---, project name: {}",
                      projectName);
 
-        final WorkspaceProject workspaceProject = workspaceProjectService.resolveProject(spaces.getSpace(spaceName), projectName);
-
         final ProjectResponse projectResponse = new ProjectResponse();
-        final GAV projectGAV = workspaceProject.getMainModule().getPom().getGav();
-
-        projectResponse.setGroupId(projectGAV.getGroupId());
-        projectResponse.setVersion(projectGAV.getVersion());
-        projectResponse.setName(workspaceProject.getName());
-        projectResponse.setDescription(workspaceProject.getMainModule().getPom().getDescription());
 
         return projectResponse;
     }
@@ -307,10 +262,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setProjectName(projectName);
         jobRequest.setSpaceName(spaceName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.compileProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -331,10 +283,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setOrganizationalUnitName(organizationalUnitName);
         jobRequest.setProjectName(projectName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.installProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -356,10 +305,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setProjectName(projectName);
         jobRequest.setSpaceName(spaceName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.testProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -380,10 +326,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setProjectName(projectName);
         jobRequest.setSpaceName(spaceName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.deployProjectRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -394,26 +337,8 @@ public class ProjectResource {
     @RolesAllowed({REST_ROLE, REST_PROJECT_ROLE})
     public Collection<OrganizationalUnit> getOrganizationalUnits() {
         logger.debug("-----getOrganizationalUnits--- ");
-        final Collection<org.guvnor.structure.organizationalunit.OrganizationalUnit> origOrgUnits
-                = organizationalUnitService.getAllOrganizationalUnits();
 
-        final List<OrganizationalUnit> organizationalUnits = new ArrayList<>();
-        for (final org.guvnor.structure.organizationalunit.OrganizationalUnit ou : origOrgUnits) {
-            final OrganizationalUnit orgUnit = new OrganizationalUnit();
-            orgUnit.setName(ou.getName());
-            orgUnit.setOwner(ou.getOwner());
-            orgUnit.setDefaultGroupId(ou.getDefaultGroupId());
-
-            final List<String> projectNames = new ArrayList<>();
-            for (final WorkspaceProject workspaceProject : workspaceProjectService.getAllWorkspaceProjects(ou)) {
-                projectNames.add(workspaceProject.getName());
-            }
-
-            orgUnit.setProjects(projectNames);
-            organizationalUnits.add(orgUnit);
-        }
-
-        return organizationalUnits;
+        return Collections.emptyList();
     }
 
     @GET
@@ -423,22 +348,8 @@ public class ProjectResource {
     public OrganizationalUnit getOrganizationalUnit(@PathParam("organizationalUnitName") String organizationalUnitName) {
         logger.debug("-----getOrganizationalUnit ---, OrganizationalUnit name: {}",
                      organizationalUnitName);
-        final org.guvnor.structure.organizationalunit.OrganizationalUnit origOrgUnit
-                = checkOrganizationalUnitExistence(organizationalUnitName);
 
-        final OrganizationalUnit orgUnit = new OrganizationalUnit();
-        orgUnit.setName(origOrgUnit.getName());
-        orgUnit.setOwner(origOrgUnit.getOwner());
-        orgUnit.setDefaultGroupId(origOrgUnit.getDefaultGroupId());
-
-        final List<String> projectNames = new ArrayList<>();
-        for (final WorkspaceProject workspaceProject : workspaceProjectService.getAllWorkspaceProjects(origOrgUnit)) {
-            projectNames.add(workspaceProject.getName());
-        }
-
-        orgUnit.setProjects(projectNames);
-
-        return orgUnit;
+        return null;
     }
 
     @POST
@@ -460,10 +371,7 @@ public class ProjectResource {
         jobRequest.setOwner(organizationalUnit.getOwner());
         jobRequest.setDefaultGroupId(organizationalUnit.getDefaultGroupId());
         jobRequest.setProjects(organizationalUnit.getProjects());
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.createOrganizationalUnitRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -486,14 +394,6 @@ public class ProjectResource {
                      organizationalUnit.getOwner(),
                      organizationalUnit.getDefaultGroupId());
 
-        org.guvnor.structure.organizationalunit.OrganizationalUnit origOrgUnit
-                = checkOrganizationalUnitExistence(orgUnitName);
-
-        // use owner in existing OU if post owner is null
-        if (organizationalUnit.getOwner() == null) {
-            organizationalUnit.setOwner(origOrgUnit.getOwner());
-        }
-
         String id = newId();
         UpdateOrganizationalUnitRequest jobRequest = new UpdateOrganizationalUnitRequest();
         jobRequest.setStatus(JobStatus.ACCEPTED);
@@ -501,10 +401,7 @@ public class ProjectResource {
         jobRequest.setOrganizationalUnitName(organizationalUnit.getName());
         jobRequest.setOwner(organizationalUnit.getOwner());
         jobRequest.setDefaultGroupId(organizationalUnit.getDefaultGroupId());
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.updateOrganizationalUnitRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -518,8 +415,6 @@ public class ProjectResource {
         logger.debug("-----addRepositoryToOrganizationalUnit--- , OrganizationalUnit name: {}, Project name: {}",
                      organizationalUnitName,
                      projectName);
-        checkOrganizationalUnitExistence(organizationalUnitName);
-        checkProjectExistence(organizationalUnitName, projectName);
 
         String id = newId();
         AddProjectToOrganizationalUnitRequest jobRequest = new AddProjectToOrganizationalUnitRequest();
@@ -527,10 +422,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setOrganizationalUnitName(organizationalUnitName);
         jobRequest.setProjectName(projectName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.addProjectToOrganizationalUnitRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -544,8 +436,6 @@ public class ProjectResource {
         logger.debug("-----removeRepositoryFromOrganizationalUnit--- , OrganizationalUnit name: {}, Repository name: {}",
                      organizationalUnitName,
                      projectName);
-        checkOrganizationalUnitExistence(organizationalUnitName);
-        checkProjectExistence(organizationalUnitName, projectName);
 
         String id = newId();
         RemoveProjectFromOrganizationalUnitRequest jobRequest = new RemoveProjectFromOrganizationalUnitRequest();
@@ -553,10 +443,7 @@ public class ProjectResource {
         jobRequest.setJobId(id);
         jobRequest.setOrganizationalUnitName(organizationalUnitName);
         jobRequest.setProjectName(projectName);
-
         addAcceptedJobResult(id);
-
-        jobRequestObserver.removeProjectFromOrganizationalUnitRequest(jobRequest);
 
         return createAcceptedStatusResponse(jobRequest);
     }
@@ -568,46 +455,15 @@ public class ProjectResource {
     public Response deleteOrganizationalUnit(@PathParam("organizationalUnitName") String organizationalUnitName) {
         logger.debug("-----deleteOrganizationalUnit--- , OrganizationalUnit name: {}",
                      organizationalUnitName);
-        checkOrganizationalUnitExistence(organizationalUnitName);
 
         String id = newId();
         RemoveOrganizationalUnitRequest jobRequest = new RemoveOrganizationalUnitRequest();
         jobRequest.setStatus(JobStatus.ACCEPTED);
         jobRequest.setJobId(id);
         jobRequest.setOrganizationalUnitName(organizationalUnitName);
-
         addAcceptedJobResult(id);
 
-        jobRequestObserver.removeOrganizationalUnitRequest(jobRequest);
-
         return createAcceptedStatusResponse(jobRequest);
-    }
-
-    private org.guvnor.structure.organizationalunit.OrganizationalUnit checkOrganizationalUnitExistence(String orgUnitName) {
-        if (orgUnitName == null || orgUnitName.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(orgUnitName).build());
-        }
-
-        org.guvnor.structure.organizationalunit.OrganizationalUnit origOrgUnit
-                = organizationalUnitService.getOrganizationalUnit(orgUnitName);
-
-        if (origOrgUnit == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(orgUnitName).build());
-        }
-        return origOrgUnit;
-    }
-
-    private WorkspaceProject checkProjectExistence(String spaceName, String projectName) {
-        if (projectName == null || projectName.isEmpty() || spaceName == null || spaceName.isEmpty()) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(projectName).build());
-        }
-
-        final WorkspaceProject workspaceProject = workspaceProjectService.resolveProject(spaces.getSpace(spaceName), projectName);
-
-        if (workspaceProject == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(projectName).build());
-        }
-        return workspaceProject;
     }
 
     private Response createAcceptedStatusResponse(JobRequest jobRequest) {
