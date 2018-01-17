@@ -15,19 +15,12 @@
  */
 package org.guvnor.common.services.project.backend.server;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import javax.enterprise.inject.Instance;
 
 import org.guvnor.common.services.project.model.Module;
@@ -46,9 +39,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.uberfire.backend.server.spaces.SpacesAPIImpl;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.spaces.Space;
 import org.uberfire.spaces.SpacesAPI;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WorkspaceProjectServiceImplTest {
@@ -76,8 +73,7 @@ public class WorkspaceProjectServiceImplTest {
     @Mock
     ModuleService moduleService;
 
-    @Mock
-    SpacesAPI spaces;
+    SpacesAPI spaces = new SpacesAPIImpl();
 
     Space space1;
     Space space2;
@@ -110,8 +106,8 @@ public class WorkspaceProjectServiceImplTest {
         ou2 = new OrganizationalUnitImpl("ou2",
                                          "owner",
                                          "defaultGroupID");
-        space1 = new Space("ou1");
-        space2 = new Space("ou2");
+        space1 = spaces.getSpace("ou1");
+        space2 = spaces.getSpace("ou2");
 
         doReturn(ou1).when(organizationalUnitService).getOrganizationalUnit("ou1");
         doReturn(ou2).when(organizationalUnitService).getOrganizationalUnit("ou2");
@@ -132,9 +128,9 @@ public class WorkspaceProjectServiceImplTest {
         doReturn(Optional.of(mock(Branch.class))).when(repository1).getDefaultBranch();
         doReturn("repository1").when(repository1).getAlias();
         doReturn(Optional.of(mock(Branch.class))).when(repository2).getDefaultBranch();
-        doReturn("repository2").when(repository2).getAlias();
+        doReturn("repository-with-same-alias").when(repository2).getAlias();
         doReturn(Optional.of(mock(Branch.class))).when(repository3).getDefaultBranch();
-        doReturn("repository3").when(repository3).getAlias();
+        doReturn("repository-with-same-alias").when(repository3).getAlias();
 
         allRepositories = new ArrayList<>();
         allRepositories.add(repository1);
@@ -142,7 +138,12 @@ public class WorkspaceProjectServiceImplTest {
         allRepositories.add(repository3);
 
         doReturn(allRepositories).when(repositoryService).getAllRepositoriesFromAllUserSpaces();
-        doReturn(Arrays.asList(repository1, repository2)).when(repositoryService).getRepositories(Mockito.eq(space1));
+        doReturn(allRepositories).when(repositoryService).getAllRepositoriesFromAllUserSpaces();
+        doReturn(Arrays.asList(repository1,
+                               repository2)).when(repositoryService).getRepositories(Mockito.eq(space1));
+        doReturn(Arrays.asList(repository1,
+                               repository2)).when(repositoryService).getAllRepositories(Mockito.eq(space1));
+        doReturn(Arrays.asList(repository3)).when(repositoryService).getAllRepositories(Mockito.eq(space2));
         doReturn(Collections.singletonList(repository3)).when(repositoryService).getRepositories(Mockito.eq(space2));
     }
 
@@ -176,31 +177,6 @@ public class WorkspaceProjectServiceImplTest {
                        allWorkspaceProjects);
 
         assertEquals(1,
-                     allWorkspaceProjects.size());
-    }
-
-    @Test
-    /**
-     * Here the list in the existing OU instance is old and does not have the latest repository that someone just created.
-     */
-    public void getAllProjectsForOU2WhenRepositoryListHasUpdated() throws Exception {
-
-        final Repository repository4 = mock(Repository.class);
-        doReturn(Optional.of(mock(Branch.class))).when(repository4).getDefaultBranch();
-        doReturn("repository4").when(repository4).getAlias();
-        ou2.getRepositories().add(repository4);
-        allRepositories.add(repository4);
-
-        final Collection<WorkspaceProject> allWorkspaceProjects = workspaceProjectService.getAllWorkspaceProjects(new OrganizationalUnitImpl("ou2",
-                                                                                                                                             "",
-                                                                                                                                             ""));
-
-        assertContains(repository3,
-                       allWorkspaceProjects);
-        assertContains(repository4,
-                       allWorkspaceProjects);
-
-        assertEquals(2,
                      allWorkspaceProjects.size());
     }
 

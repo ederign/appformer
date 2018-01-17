@@ -15,12 +15,9 @@
  */
 package org.guvnor.common.services.project.backend.server;
 
-import static org.kie.soup.commons.validation.PortablePreconditions.checkNotNull;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -42,6 +39,8 @@ import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.spaces.Space;
 import org.uberfire.spaces.SpacesAPI;
+
+import static org.kie.soup.commons.validation.PortablePreconditions.checkNotNull;
 
 public class WorkspaceProjectServiceImpl
         implements WorkspaceProjectService {
@@ -84,9 +83,11 @@ public class WorkspaceProjectServiceImpl
     public Collection<WorkspaceProject> getAllWorkspaceProjects(final OrganizationalUnit organizationalUnit) {
         final List<WorkspaceProject> result = new ArrayList<>();
 
-        for (final Repository repository : repositoryService.getAllRepositoriesFromAllUserSpaces()) {
+        Space space = spaces.getSpace(organizationalUnit.getName());
+        for (final Repository repository : repositoryService.getAllRepositories(space)) {
 
-            if (containsRepository(organizationalUnit, repository)
+            if (containsRepository(organizationalUnit,
+                                   repository)
                     && repository.getDefaultBranch().isPresent()) {
 
                 result.add(new WorkspaceProject(organizationalUnit,
@@ -155,27 +156,35 @@ public class WorkspaceProjectServiceImpl
             throw new IllegalStateException("New repository should always have a branch.");
         }
 
-        return resolveProject(repository.getSpace(), repository.getDefaultBranch().get());
+        return resolveProject(repository.getSpace(),
+                              repository.getDefaultBranch().get());
     }
 
     @Override
-    public WorkspaceProject resolveProject(final Space space, final Branch branch) {
-        return resolveProject(space, branch.getPath());
+    public WorkspaceProject resolveProject(final Space space,
+                                           final Branch branch) {
+        return resolveProject(space,
+                              branch.getPath());
     }
 
     @Override
-    public WorkspaceProject resolveProject(final Space space, final Module module) {
-        return resolveProject(space, module.getRootPath());
+    public WorkspaceProject resolveProject(final Space space,
+                                           final Module module) {
+        return resolveProject(space,
+                              module.getRootPath());
     }
 
     @Override
-    public WorkspaceProject resolveProject(final Space space, final String name) {
+    public WorkspaceProject resolveProject(final Space space,
+                                           final String name) {
 
         OrganizationalUnit ou = organizationalUnitService.getOrganizationalUnit(space.getName());
-        return resolveProject(ou, name);
+        return resolveProject(ou,
+                              name);
     }
 
-    private WorkspaceProject resolveProject(OrganizationalUnit ou, final String name) {
+    private WorkspaceProject resolveProject(OrganizationalUnit ou,
+                                            final String name) {
         for (final WorkspaceProject workspaceProject : getAllWorkspaceProjects(ou)) {
             if (workspaceProject.getName().equals(name)) {
                 return workspaceProject;
@@ -186,16 +195,20 @@ public class WorkspaceProjectServiceImpl
     }
 
     @Override
-    public WorkspaceProject resolveProjectByRepositoryAlias(final Space space, final String repositoryAlias) {
-        return resolveProject(repositoryService.getRepositoryFromSpace(space, repositoryAlias));
+    public WorkspaceProject resolveProjectByRepositoryAlias(final Space space,
+                                                            final String repositoryAlias) {
+        return resolveProject(repositoryService.getRepositoryFromSpace(space,
+                                                                       repositoryAlias));
     }
 
     @Override
-    public WorkspaceProject resolveProject(final Space space, final Path path) {
+    public WorkspaceProject resolveProject(final Space space,
+                                           final Path path) {
 
         final org.uberfire.java.nio.file.Path repositoryRoot = Paths.convert(path).getRoot();
 
-        final Repository repository = repositoryService.getRepository(space, Paths.convert(repositoryRoot));
+        final Repository repository = repositoryService.getRepository(space,
+                                                                      Paths.convert(repositoryRoot));
 
         final Branch branch = resolveBranch(repositoryRoot,
                                             repository);
@@ -210,7 +223,8 @@ public class WorkspaceProjectServiceImpl
     public WorkspaceProject resolveProject(Path path) {
         return spaces
                 .resolveSpace(path.toURI())
-                .map(space -> resolveProject(space, path))
+                .map(space -> resolveProject(space,
+                                             path))
                 .orElseThrow(() -> new IllegalArgumentException("Could not determine space containing path: " + path));
     }
 
