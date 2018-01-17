@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -48,6 +50,8 @@ import org.guvnor.structure.server.organizationalunit.OrganizationalUnitFactory;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.security.authz.AuthorizationManager;
+import org.uberfire.spaces.Space;
+import org.uberfire.spaces.SpacesAPI;
 
 @Service
 @ApplicationScoped
@@ -77,6 +81,8 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
 
     Map<String, OrganizationalUnit> registeredOrganizationalUnits = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
+    private SpacesAPI spaces;
+
     @Inject
     public OrganizationalUnitServiceImpl(final ConfigurationService configurationService,
                                          final ConfigurationFactory configurationFactory,
@@ -88,6 +94,7 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
                                          final Event<RepoRemovedFromOrganizationalUnitEvent> repoRemovedFromOrgUnitEvent,
                                          final Event<UpdatedOrganizationalUnitEvent> updatedOrganizationalUnitEvent,
                                          final AuthorizationManager authorizationManager,
+                                         final SpacesAPI spaces,
                                          final SessionInfo sessionInfo) {
         this.configurationService = configurationService;
         this.configurationFactory = configurationFactory;
@@ -99,6 +106,7 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
         this.repoRemovedFromOrgUnitEvent = repoRemovedFromOrgUnitEvent;
         this.updatedOrganizationalUnitEvent = updatedOrganizationalUnitEvent;
         this.authorizationManager = authorizationManager;
+        this.spaces = spaces;
         this.sessionInfo = sessionInfo;
     }
 
@@ -131,6 +139,15 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     @Override
     public Collection<OrganizationalUnit> getAllOrganizationalUnits() {
         return new ArrayList<>(registeredOrganizationalUnits.values());
+    }
+
+    @Override
+    public Collection<Space> getAllUserSpaces() {
+        return registeredOrganizationalUnits
+                .values()
+                .stream()
+                .map(ou -> spaces.getSpace(ou.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -214,7 +231,7 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     }
 
     private List<String> getRepositoryAliases(final Collection<Repository> repositories) {
-        final List<String> repositoryList = new ArrayList<String>();
+        final List<String> repositoryList = new ArrayList<>();
         for (Repository repo : repositories) {
             repositoryList.add(repo.getAlias());
         }

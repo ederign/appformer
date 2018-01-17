@@ -108,6 +108,7 @@ public class OrganizationalUnitServiceTest {
                                                                       repoRemovedFromOrgUnitEvent,
                                                                       updatedOrganizationalUnitEvent,
                                                                       authorizationManager,
+                                                                      spacesAPI,
                                                                       sessionInfo);
 
         organizationalUnitService.registeredOrganizationalUnits.put("A",

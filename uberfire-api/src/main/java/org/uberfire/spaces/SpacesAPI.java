@@ -1,8 +1,6 @@
 package org.uberfire.spaces;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 public interface SpacesAPI {
 
@@ -25,9 +23,9 @@ public interface SpacesAPI {
 
     Space getSpace(String name);
 
-    Collection<Space> getSpaces();
-
-    Collection<Space> getUserSpaces();
+    default Space getDefaultSpace() {
+        return DEFAULT_SPACE;
+    }
 
     Optional<Space> resolveSpace(String uri);
 

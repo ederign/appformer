@@ -16,13 +16,9 @@
 package org.uberfire.backend.server.spaces;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.uberfire.commons.services.cdi.Startup;
@@ -37,21 +33,13 @@ public class SpacesAPIImpl implements SpacesAPI {
     private static final String PATH_PATTERN = "^[A-Za-z]+://([^/]+)/.*";
     private static final Pattern PATH_REGEX = Pattern.compile(PATH_PATTERN);
 
-    private Map<String, Space> spaces = new HashMap<>();
-
-    @PostConstruct
-    public void setup() {
-        //in future load all spaces here by default
-        spaces.put(SpacesAPI.DEFAULT_SPACE_NAME,
-                   SpacesAPI.DEFAULT_SPACE);
-    }
-
     @Override
     public Space getSpace(String name) {
-        //TODO put if absence
-        spaces.putIfAbsent(name,
-                           new Space(name));
-        return spaces.get(name);
+        if (SpacesAPI.DEFAULT_SPACE_NAME.equals(name)) {
+            return getDefaultSpace();
+        } else {
+            return new Space(name);
+        }
     }
 
     @Override
@@ -81,18 +69,5 @@ public class SpacesAPIImpl implements SpacesAPI {
                                                              space,
                                                              fsName));
         return uri;
-    }
-
-    @Override
-    public Collection<Space> getSpaces() {
-        return spaces.values();
-    }
-
-    @Override
-    public Collection<Space> getUserSpaces() {
-        final Collection<Space> userSpaces = spaces.values();
-        userSpaces.remove(SpacesAPI.DEFAULT_SPACE);
-
-        return userSpaces;
     }
 }

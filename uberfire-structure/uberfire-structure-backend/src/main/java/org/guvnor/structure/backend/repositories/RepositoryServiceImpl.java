@@ -231,7 +231,7 @@ public class RepositoryServiceImpl implements RepositoryService {
     public Collection<Repository> getAllRepositoriesFromAllUserSpaces() {
         List<Repository> allRepos = new ArrayList<>();
 
-        for (Space space : spacesAPI.getUserSpaces()) {
+        for (Space space : organizationalUnitService.getAllUserSpaces()) {
             allRepos.addAll(configuredRepositories.getAllConfiguredRepositories(space));
         }
 
