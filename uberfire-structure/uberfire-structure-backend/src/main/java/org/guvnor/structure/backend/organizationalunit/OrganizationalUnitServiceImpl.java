@@ -290,13 +290,17 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
                                                        final String defaultGroupId,
                                                        final Collection<Repository> repositories,
                                                        final Collection<Contributor> contributors) {
-        if (spaceDirectoryExists(name)) {
-            return null;
-        }
-
         OrganizationalUnit newOrganizationalUnit = null;
 
+
         try {
+            //lock nio git to avoid another pod create space with the same name concurrently
+            //lock thread in order to avoid another user on the same pod create space with the same name concurrently
+
+            if (spaceDirectoryExists(name)) {
+                return null;
+            }
+
             String _defaultGroupId = defaultGroupId == null || defaultGroupId.trim().isEmpty() ? getSanitizedDefaultGroupId(name) : defaultGroupId;
             final SpaceInfo spaceInfo = new SpaceInfo(name,
                                                       _defaultGroupId,
@@ -308,11 +312,13 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
 
             return newOrganizationalUnit;
         } finally {
+            //unlock nio git
             if (newOrganizationalUnit != null) {
                 newOrganizationalUnitEvent.fire(new NewOrganizationalUnitEvent(newOrganizationalUnit,
                                                                                getUserInfo(sessionInfo)));
             }
         }
+
     }
 
     private List<RepositoryInfo> getRepositoryAliases(final Collection<Repository> repositories) {
@@ -335,6 +341,8 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     public OrganizationalUnit updateOrganizationalUnit(String name,
                                                        String defaultGroupId,
                                                        Collection<Contributor> contributors) {
+        //should we lock the space directory here in order to avoid the concurrent updates?
+        //we are locking just the space and not the whole niogit because we are updating just contributors on this operation
         final SpaceConfigStorage spaceConfigStorage = spaceConfigStorageRegistry.get(name);
         final SpaceInfo spaceInfo = spaceConfigStorage.loadSpaceInfo();
 
@@ -350,6 +358,7 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
                     spaceInfo.setContributors(contributors);
                 }
 
+                //adriel why this is lock==false and are executing this without batch?
                 spaceConfigStorage.saveSpaceInfo(spaceInfo);
 
                 updatedOrganizationalUnit = getOrganizationalUnit(name);
@@ -435,6 +444,8 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     @Override
     public void addGroup(final OrganizationalUnit organizationalUnit,
                          final String group) {
+        //is this still used?
+        //if so, same case of updateOrganizationalUnit ?
         final SpaceConfigStorage spaceConfigStorage = spaceConfigStorageRegistry.get(organizationalUnit.getName());
         final SpaceInfo spaceInfo = spaceConfigStorage.loadSpaceInfo();
 
@@ -460,6 +471,8 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
     @Override
     public void removeGroup(final OrganizationalUnit organizationalUnit,
                             final String group) {
+        //is this still used?
+        //if so, same case of updateOrganizationalUnit ?
         final SpaceConfigStorage spaceConfigStorage = spaceConfigStorageRegistry.get(organizationalUnit.getName());
         final SpaceInfo spaceInfo = spaceConfigStorage.loadSpaceInfo();
 
@@ -483,6 +496,7 @@ public class OrganizationalUnitServiceImpl implements OrganizationalUnitService 
 
     @Override
     public void removeOrganizationalUnit(String groupName) {
+        //we should also lock niogit in order to do this operation
         final OrganizationalUnit organizationalUnit = getOrganizationalUnit(groupName);
 
         if (organizationalUnit != null) {

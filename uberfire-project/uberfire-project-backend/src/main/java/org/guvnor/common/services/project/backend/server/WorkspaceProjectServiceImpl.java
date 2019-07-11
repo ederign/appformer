@@ -159,6 +159,7 @@ public class WorkspaceProjectServiceImpl
                                        final POM pom,
                                        final DeploymentMode mode,
                                        final List<Contributor> contributors) {
+        //lock space
         String newName = this.createFreshProjectName(organizationalUnit,
                                                      pom.getName());
         pom.setName(newName);
@@ -193,6 +194,7 @@ public class WorkspaceProjectServiceImpl
                                                     repository.getAlias());
             throw ExceptionUtilities.handleException(e);
         }
+        //unlock space
     }
 
     private Repository createRepository(final OrganizationalUnit organizationalUnit,

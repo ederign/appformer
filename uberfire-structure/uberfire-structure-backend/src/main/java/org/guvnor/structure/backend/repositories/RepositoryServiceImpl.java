@@ -374,6 +374,7 @@ public class RepositoryServiceImpl implements RepositoryService {
     @Override
     public void removeRepository(final Space space,
                                  final String alias) {
+        //lock no space
         final Optional<org.guvnor.structure.organizationalunit.config.RepositoryInfo> config = findRepositoryConfig(space.getName(),
                                                                                                                     alias);
 
@@ -393,11 +394,13 @@ public class RepositoryServiceImpl implements RepositoryService {
                          e);
             throw new RuntimeException(e);
         }
+        //unlock no space
     }
 
     @Override
     public void removeRepositories(final Space space,
                                    final Set<String> aliases) {
+        //TODO check if this method is called by OU
         SpaceConfigStorage configStorage = this.spaceConfigStorage.get(space.getName());
         try {
             configStorage.startBatch();

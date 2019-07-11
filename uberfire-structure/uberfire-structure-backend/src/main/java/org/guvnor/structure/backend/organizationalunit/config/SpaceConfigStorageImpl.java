@@ -127,6 +127,7 @@ public class SpaceConfigStorageImpl implements SpaceConfigStorage {
 
     @Override
     public void saveSpaceInfo(final SpaceInfo spaceInfo) {
+        //lock should be true?
         objectStorage.write(buildSpaceConfigFilePath(SPACE_INFO),
                             spaceInfo,
                             false);
