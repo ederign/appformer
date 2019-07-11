@@ -320,6 +320,7 @@ public class RepositoryServiceImpl implements RepositoryService {
                                        final Collection<Contributor> contributors) throws RepositoryAlreadyExistsException {
 
         try {
+            //lock here due to metadatastore write
             repositoryEnvironmentConfigurations.setSpace(organizationalUnit.getName());
 
             Space space = spacesAPI.getSpace(organizationalUnit.getName());
